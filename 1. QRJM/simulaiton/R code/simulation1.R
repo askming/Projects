@@ -3,13 +3,14 @@
 #### date: 2014/10/22 (happy birthday to Lan!)####
 #### author: ming yang ####
 
-
-### 1. simulate data ###
+########################################################################
+---------------------------- 1. simulate data --------------------------
+########################################################################
 library(LaplacesDemon)
-# ralaplace(n, location, scale)
 library(MASS)
 
-sim_longitudinal_data = function(n=250, t=6, tau, sigma=1, beta, delta, re){
+# function to simulate longitudinal data
+sim_longitudinal_data = function(n=250, t=6, tau, sigma=1, beta=c(1,1), delta=c(1,1)){
 	# n - # of subjects
 	# t - # of measures per subjects without drop-outs
 	# tau - quantile
@@ -36,38 +37,43 @@ sim_longitudinal_data = function(n=250, t=6, tau, sigma=1, beta, delta, re){
 	
 	list(y = y, X = X, Z = Z, H = H, U = U)		
 }
+# try it
+# testdata = sim_longitudinal_data(tau=0.25, beta=c(1,1), delta=c(1,1))
 
-
-calculate_Ti = function(longidata, n=250, alpha, delta, gamma){
-	Time[i] = numeric(250)
+# function to simulate survival time
+sim_Ti = function(longidata, n=250, alpha, delta=c(1,1), gamma=c(1,1)){
+	Time = numeric(250)
 	S = runif(n) # survival probability
 	Z = longidata$Z
 	H = longidata$H
-	U = longidata$U
+	U = longidata$U[seq(1,n*6,6),]
 	W = matrix(rnorm(n*2), ncol=2)
 	
-	if (alpha == c(0, 0)){
+	if (alpha[1]==0 & alpha[2]==0){
 		for (i in 1:n){
-			fun = function(gamma, t, W){
-				exp(-t*exp(gamma%*% W[i,])) - S[i]
-			}
+			Time[i] = - log(S[i]) / exp(gamma %*% W[i,])
 		}
 	}
 	
 	else{
 		for (i in 1:n){
-			fun = function(n, alpha, delta, i, t, W){	
-				# survival function formula	
-				exp(- (exp(alpha[1]*(delta %*% c(H[i,1,1], H[i,1,2]*t)) + alpha[2]*(U[i,]%*%c(Z[i,1,1], t)) + gamma%*% W[i,]) -exp(alpha[1]*delta[1]*H[i,1,1] + alpha[2]*U[i,1])+gamma%*% W[i,])/(alpha[2]*U[i,2]+alpha[1]*delta[2]*H[i,1,2])) - S[i]
-		
-			}
-			Time[i] = optimize(f=fun, interval=c(-1e10, 1e10))		
+			B = exp(alpha[1] * delta[1] * H[i,1,1] + alpha[2] * U[i,1] + gamma %*% W[i,])
+			A = alpha[2] * U[i,2] + alpha[1] * delta[2] * H[i,1,2]
+			Time[i] = log(1-log(S[i])*A/exp(B))/A
 		}
 	}		
 	return(Time)	
 }
 
+# try it
+# Ti = sim_Ti(testdata, alpha=c(0,0), delta=c(1,1), gamma=c(1,1))
+# Ti = sim_Ti(testdata, alpha=c(1,1), delta=c(1,1), gamma=c(1,1))
+# when A is negative there may be no solution for t
 
+
+C = rbeta(250, 4, 1) *5
+
+sum(Ti > 3)/250
 
 
 
