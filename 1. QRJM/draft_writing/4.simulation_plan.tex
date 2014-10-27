@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage {setspace}
+\usepackage[hang,flushmargin]{footmisc} %control footnote indent
+\usepackage{url} % for website links
+\usepackage{amssymb,amsmath}%for matrix
+\usepackage{graphicx}%for figure
+\usepackage{appendix}%for appendix
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{morefloats}%in case there are too many float tables and figures
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\captionsetup[subtable]{font=normal}
+\usepackage{color}
+\usepackage{hyperref}
+
+%\usepackage{Sweave}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
+
+\graphicspath{{0.plots/}}
+
+
+
+\begin{document}
+
+\section{Plan for simulation study}
+
+\begin{equation}\label{eqn:joint}
+\left\{
+\begin{array}{l}
+y_{it} = \boldsymbol{\beta}^{\top}{\boldsymbol X}_{it} + \boldsymbol{\delta}^{\top}{\boldsymbol H}_{it} + {\boldsymbol u}_i^{\top}{\boldsymbol Z}_{it} + \varepsilon_{it} =\overset{\sim}{\tau}_{it} + \varepsilon_{it}\\
+h(T_i|\mathcal{T}_{iT_i}, {\boldsymbol W}_i;  \boldsymbol{\gamma}, \alpha_1, 
+\alpha_2) = h_0(T_i)\exp(\boldsymbol{\gamma}^{\top}{\boldsymbol W}_i + \alpha_1\boldsymbol{\delta}^{\top}{\boldsymbol H}_{iT_i} + \alpha_2{\boldsymbol u}_i^{\top}{\boldsymbol Z}_{iT_i})
+\end{array}
+\right.
+\end{equation}
+
+
+\section{Simulation setting }
+Following the simulation setting from \cite{farcomeni2014longitudinal}, we set\par
+
+$n=250$\par
+$(\alpha_1, \alpha_2)=\{(1, 0), (0, 1), (0, 0)\}, \hspace{2em}\tau=\{0.25, 0.5, 0.75\}$\par
+$\boldsymbol{\beta, \delta, \gamma}=(1, 1)^{\top}, \hspace{2em} \sigma=1$\par
+$\boldsymbol{u}_i\sim N\left(\begin{pmatrix} 0\\ 0\end{pmatrix}, \begin{pmatrix}0.3^2 & 0.16*0.3^2\\ 0.16*0.3^2 & 0.3^2\end{pmatrix} \right)$\par
+
+${\boldsymbol Z}_{it}=(1, t)^{\top},\hspace{1em} {\boldsymbol H}_{it}=(h_{i1}, h_{i2}*t)^{\top},\hspace{1em} {\boldsymbol X}_{it}=(1, x_i)^{\top},$ with $h_{i1}, h_{i2}, x_i, W_{i1}$ and $W_{i2}$ generated from independent standard normals. \par
+
+Fix $h_0(s)=1$ and obtain the survival distribution as 
+
+\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i)=\exp\left\{-\frac{e^{\alpha_1(\delta_1H_{i1}+\delta_2H_{i2t}) + \alpha_2(u_{i1}+u_{i2}t) + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i} - e^{\alpha_1\delta_1H_{i1}+\alpha_2u_{i1} + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}}{\alpha_2u_{i2}+\alpha_1\delta_2h_i}\right\}\] when $\alpha_1\ne0$ or $\alpha_2\ne0$ and 
+
+\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i) =  \exp\{-te^{\boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}\}\]
+when $\alpha_1=\alpha_2=0.$ We can obtain event time $T_i$ by inverting above survival function after generating $n$ random variates from standard uniform distribution.\par
+
+Let the censoring time $C_i/5$ be distributed according to $beta(4,1)$ to obtain a censoring proportion around 25\%. \par
+
+Longitudinal outcomes before drop out are independently generated from and ALD for the $\tau-$th quantile, centered on 
+\[\boldsymbol{\beta}^{\top}{\boldsymbol X}_{it} + \boldsymbol{\delta}^{\top}{\boldsymbol H}_{it} + {\boldsymbol u}_i^{\top}{\boldsymbol Z}_{it},\] and with dispersion parameter $\sigma$.
+
+
+
+
+\section{Result}
+%%%%%%%%%%%%% insert table %%%%%%%%%%%%%%
+\begin{table}[H]
+\centering
+\begin{tabular}{l|r}
+Item & Quantity \\\hline
+Widgets & 42 \\
+Gadgets & 13
+\end{tabular}
+\caption{\label{tab:widgets}An example table.}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%% insert figure %%%%%%%%%%%%%%
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[scale=0.2]{figure.jpg}
+%\caption{An example figure.}
+%\end{center}
+%\end{figure}
+%
+%
+%All is done in \LaTeX \cite{knuth1986texbook}.
+%
+%
+\bibliographystyle{plain}%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{section}{References}
+\bibliography{QRJM}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
