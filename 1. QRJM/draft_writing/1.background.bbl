@@ -1,5 +1,22 @@
 \begin{thebibliography}{10}
 
+\bibitem{diggle2007analysis}
+Peter Diggle, Daniel Farewell, and Robin Henderson.
+\newblock Analysis of longitudinal data with drop-out: objectives, assumptions
+  and a proposal.
+\newblock {\em Journal of the Royal Statistical Society: Series C (Applied
+  Statistics)}, 56(5):499--550, 2007.
+
+\bibitem{diggle2002analysis}
+Peter Diggle, Patrick Heagerty, Kung-Yee Liang, and Scott Zeger.
+\newblock {\em Analysis of longitudinal data}.
+\newblock Oxford University Press, 2002.
+
+\bibitem{diggle1994informative}
+Peter Diggle and Michael~G Kenward.
+\newblock Informative drop-out in longitudinal data analysis.
+\newblock {\em Applied statistics}, pages 49--93, 1994.
+
 \bibitem{fisher1919xv}
 Ronald~A Fisher.
 \newblock The correlation between relatives on the supposition of mendelian
@@ -19,6 +36,11 @@ Marco Geraci and Matteo Bottai.
 \newblock Quantile regression for longitudinal data using the asymmetric
   laplace distribution.
 \newblock {\em Biostatistics}, 8(1):140--154, 2007.
+
+\bibitem{hogan2004handling}
+Joseph~W Hogan, Jason Roy, and Christina Korkontzelou.
+\newblock Handling drop-out in longitudinal studies.
+\newblock {\em Statistics in medicine}, 23(9):1455--1497, 2004.
 
 \bibitem{jung1996quasi}
 Sin-Ho Jung.
@@ -48,6 +70,14 @@ Hideo Kozumi and Genya Kobayashi.
 \newblock {\em Journal of statistical computation and simulation},
   81(11):1565--1578, 2011.
 
+\bibitem{lipsitz1997quantile}
+Stuart~R Lipsitz, Garrett~M Fitzmaurice, Geert Molenberghs, and Lue~Ping Zhao.
+\newblock Quantile regression methods for longitudinal data with drop-outs:
+  Application to cd4 cell counts of patients infected with the human
+  immunodeficiency virus.
+\newblock {\em Journal of the Royal Statistical Society: Series C (Applied
+  Statistics)}, 46(4):463--476, 1997.
+
 \bibitem{liu2009mixed}
 Yuan Liu and Matteo Bottai.
 \newblock Mixed-effects models for conditional quantiles with longitudinal
@@ -60,9 +90,21 @@ Youxi Luo, Heng Lian, and Maozai Tian.
 \newblock {\em Journal of Statistical Computation and Simulation},
   82(11):1635--1649, 2012.
 
+\bibitem{touloumi2003comparison}
+G~Touloumi, AG~Babiker, MG~Kenward, SJ~Pocock, and JH~Darbyshire.
+\newblock A comparison of two methods for the estimation of precision with
+  incomplete longitudinal data, jointly modelled with a time-to-event outcome.
+\newblock {\em Statistics in medicine}, 22(20):3161--3175, 2003.
+
 \bibitem{yu2001bayesian}
 Keming Yu and Rana~A Moyeed.
 \newblock Bayesian quantile regression.
 \newblock {\em Statistics \& Probability Letters}, 54(4):437--447, 2001.
+
+\bibitem{yuan2010bayesian}
+Ying Yuan and Guosheng Yin.
+\newblock Bayesian quantile regression for longitudinal studies with
+  nonignorable missing data.
+\newblock {\em Biometrics}, 66(1):105--114, 2010.
 
 \end{thebibliography}
