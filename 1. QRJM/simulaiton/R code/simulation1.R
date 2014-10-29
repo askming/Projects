@@ -2,51 +2,23 @@
 
 #### date: 2014/10/22 (happy birthday to Lan!)####
 #### author: ming yang ####
-
+rm(list=ls())
 ########################################################################
 ---------------------------- 1. simulate data --------------------------
 ########################################################################
 library(LaplacesDemon)
 library(MASS)
 
-# function to simulate longitudinal data
-sim_longitudinal_data = function(n=250, t=6, tau, sigma=1, beta=c(1,1), delta=c(1,1)){
-	# n - # of subjects
-	# t - # of measures per subjects without drop-outs
-	# tau - quantile
-	# sigma - scale parameter
-	time = c(0, 0.25, 0.5, 0.75, 1, 3)
-	y = matrix(NA, nrow=n, ncol=t) # wide format
-	X = H = Z = array(NA, dim=c(n, t, 2)) # array, wide format
-	 # leng = n
-	X[ , , 1] = Z [, , 1]= 1  
-	X[ , , 2] = matrix(rep(rnorm(n), each=t), ncol=t, byrow=T)
-	Z[ , , 2] = matrix(rep(time, n), nrow=n, byrow=T)
-	H[ , , 1] = matrix(rep(rnorm(n), each=t), ncol=t, byrow=T)
-	H[ , , 2] = matrix(rep(rnorm(n), each=t), nrow=n, byrow=T)
-	U = NULL # random effects
-	for (i in 1:n){
-		u = mvrnorm(1, mu = c(0,0), Sigma = matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))
-		for (j in 1:t){
-			U = rbind(U, u)
-			location = beta %*% X[i,j, ] + delta %*% c(H[i,j,1], H[i,j,2]*time[j]) + u %*% Z[i,j, ]
-			y[i,j] = ralaplace(1, location, scale = sigma, kappa = tau)
-		
-		}	
-	}
-	
-	list(y = y, X = X, Z = Z, H = H, U = U)		
-}
-# try it
-# testdata = sim_longitudinal_data(tau=0.25, beta=c(1,1), delta=c(1,1))
-
-# function to simulate survival time
-sim_Ti = function(longidata, n=250, alpha, delta=c(1,1), gamma=c(1,1)){
-	Time = numeric(250)
+###############################################################
+############ function to simulate survival time ###############
+###############################################################
+# survival function is given by: S(t)= exp(- exp(B) * (exp(A*t) - 1) ) / A)
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){
+	Time = numeric(n)
 	S = runif(n) # survival probability
-	Z = longidata$Z
-	H = longidata$H
-	U = longidata$U[seq(1,n*6,6),]
+	H = matrix(rnorm(2*n), ncol=2)
+	U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))
+	attributes(U)[[2]]=NULL # remove 'dimnames' attribute
 	W = matrix(rnorm(n*2), ncol=2)
 	
 	if (alpha[1]==0 & alpha[2]==0){
@@ -57,24 +29,100 @@ sim_Ti = function(longidata, n=250, alpha, delta=c(1,1), gamma=c(1,1)){
 	
 	else{
 		for (i in 1:n){
-			B = exp(alpha[1] * delta[1] * H[i,1,1] + alpha[2] * U[i,1] + gamma %*% W[i,])
-			A = alpha[2] * U[i,2] + alpha[1] * delta[2] * H[i,1,2]
+			B = alpha[1] * delta[1] * H[i,1] + alpha[2] * U[i,1] + gamma %*% W[i,]
+			A = alpha[2] * U[i,2] + alpha[1] * delta[2] * H[i,2]
 			Time[i] = log(1-log(S[i])*A/exp(B))/A
 		}
-	}		
-	return(Time)	
+	}	
+	Ti_id = which(!is.na(Time))
+	Time=Time[Ti_id][1:250]
+	U=U[Ti_id, ][1:250, ]
+	H=H[Ti_id, ][1:250, ]
+	W=W[Ti_id, ][1:250, ]
+		
+	list(Ti=Time, H=H, U=U, W=W)	
 }
 
-# try it
-# Ti = sim_Ti(testdata, alpha=c(0,0), delta=c(1,1), gamma=c(1,1))
-# Ti = sim_Ti(testdata, alpha=c(1,1), delta=c(1,1), gamma=c(1,1))
-# when A is negative there may be no solution for t
+####### try it #######
+surdata = sim_Ti(alpha=c(1,1))
+# when A is negative there may be no solution for t, so remove those observations
 
 
-C = rbeta(250, 4, 1) *5
+###############################################################
+###### function to simulate longitudinal data #################
+###############################################################
+sim_longitudinal_data = function(survival_data=surdata, n=250, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau, sigma=1, beta=c(1,1), delta=c(1,1)){
+	# survival_data - data simulated from survival model
+	# n - # of subjects
+	# time - time points of observations
+	# tau - quantile
+	# sigma - scale parameter
+	time = time # at most # = length(time) observations per patient
+	y = matrix(NA, nrow=n, ncol=length(time)) # wide format
+	Ti = survival_data$Ti
+	U = survival_data$U # random effects
+	H = survival_data$H
+	X = cbind(1, rnorm(n))
+	count = sapply(Ti, function(x) sum(x > time)) # number of observations after drop-outs
+	event = as.numeric(count != 6) # 1 for event, 0 for censoring
 
-sum(Ti > 3)/250
+	for (i in 1:n){
+		for (j in 1:count[i]){
+			location = beta %*% X[i, ] + delta %*% c(H[i,1], H[i,2]*time[j]) + U[i,] %*% c(1, time[j])
+			y[i,j] = ralaplace(1, location, scale=sigma, kappa=tau)		
+		}	
+	}
+	
+	list(y = y, X = X, J=count, event=event)		
+}
+
+longidata = sim_longitudinal_data(surdata, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau=0.25)
+
+# ## simulate censoring time from beta(4,1)
+# C = rbeta(250, 4, 1) * 5
+# censor = numeric(length(C))
+# for (i in 1: length(C)){
+	# censor[i] = min(C[i], 3)
+# }
+
+###############################################################
+###### function to simulate multiple joint data sets ##########
+###############################################################
+sim_multiple_data = function(N, sur_fun=sim_Ti, longi_fun=sim_longitudinal_data, alpha, tau){
+	# N - number of data sets to generate
+	# sur_fun - function to simulate survival data
+	# longi_fun - function to sumualte longitudinal data
+	# association mechanism for JM
+	outdata = vector(mode='list', N)
+	for (i in 1:N){
+		sur_data = sur_fun(alpha=alpha)
+		longi_data = longi_fun(sur_data, tau=tau)
+		outdata[[i]] = list(survival_data=sur_data, longitudinal_data=longi_data)		
+	}
+	outdata	
+}
+
+## try it out
+t1=Sys.time()
+testdata = sim_multiple_data(N=500, alpha=c(1,1), tau=0.25)
+t2=Sys.time()
+t2-t1
+
+# check = function(data, ind1, ind2, var, fun, ...){
+	# function used to check the simulated data
+	# var = data[[ind1]][[ind2]][[var]]
+	# fun(var, ...)
+# }
+
+# check(testdata, 8, 2, 'event', fun=table)
 
 
 
-### 2. run the model ###
+
+
+
+
+
+
+
+
