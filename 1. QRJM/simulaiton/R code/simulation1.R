@@ -78,12 +78,6 @@ sim_longitudinal_data = function(survival_data=surdata, n=250, time=c(0, 0.25, 0
 
 longidata = sim_longitudinal_data(surdata, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau=0.25)
 
-# ## simulate censoring time from beta(4,1)
-# C = rbeta(250, 4, 1) * 5
-# censor = numeric(length(C))
-# for (i in 1: length(C)){
-	# censor[i] = min(C[i], 3)
-# }
 
 ###############################################################
 ###### function to simulate multiple joint data sets ##########
