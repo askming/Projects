@@ -1,0 +1,135 @@
+# WinBUGS 1.4 code for joint time-varying model (Model XII in Guo and Carlin paper)
+# Written by Xu Guo, 6/26/03
+# Updated by Jeremiah Menk, April 2010
+
+model{
+
+for (i in 1:N) {
+    for (j in 1:M) {
+
+# longitudinal portion
+       Y[i, j] ~ dnorm(muy[i, j], tauz)
+       muy[i, j]<-beta1[1]+beta1[2]*t[j]+beta1[3]*t[j]*randgrp1[i]+
+  beta1[4]*gender1[i]+beta1[5]*prevoi1[i]+beta1[6]*stratum1[i]+U[i,1]+U[i,2]*t[j]
+
+# calculate the longitudinal lpml
+  llpml[i,j]<-log(sqrt(tauz))+(-tauz/2)*(Y[i,j]-muy[i,j])*(Y[i,j]-muy[i,j])
+    }
+
+# use the step function to compute the event indicator
+    death[i] <- step(tee[i]-surt.cen[i]-0.01)
+    censor[i] <- step(surt.cen[i]-tee[i])
+
+# simplify code using overlapping parts
+    match[i] <- 1/(r3*U[i,2])*exp(beta2[1]+beta2[2]*randgrp1[i]+
+      beta2[3]*gender1[i]+beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i,1]+
+      r2*U[i,2]+r3*U[i,1])*(exp(r3*U[i,2]*tee[i])-1)
+
+# use the zeros trick to specify the ll for the survival portion
+    zeros[i] <- 0
+    phi[i] <- -1*death[i]*((beta2[1]+beta2[2]*randgrp1[i]+
+      beta2[3]*gender1[i]+beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i,1]+
+      r2*U[i,2]+r3*(U[i,1]+U[i,2]*tee[i])) - match[i]) +
+      censor[i]*match[i] + C
+    zeros[i] ~ dpois(phi[i])
+
+    U[i,1:2] ~ dmnorm(U0[],tau[,])
+
+# calculate the survival lpml
+    slpml[i] <- death[i]*((beta2[1]+beta2[2]*randgrp1[i]+
+      beta2[3]*gender1[i]+beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i,1]+
+      r2*U[i,2]+r3*(U[i,1]+U[i,2]*tee[i])) - match[i]) -
+      censor[i]*match[i]
+   }
+
+# sum to get the lpml's
+LLPML <- sum(llpml[,])
+SLPML <- sum(slpml[])
+OLPML <- LLPML + SLPML
+
+# constant for zeros trick
+C <- 10000
+
+sigmaz<-1/tauz
+sigma[1:2,1:2]<-inverse(tau[,])
+sigma1<-sigma[1,1]
+sigma2<-sigma[2,2]
+sigma12<-sigma[1,2]
+cor<-sigma12/(sqrt(sigma1*sigma2))
+
+#priors
+tau[1:2,1:2] ~ dwish(R[,], 23)
+beta1[1:6]~dmnorm(betamu1[],Sigma1[,])
+tauz~dgamma(0.1, 0.1)
+beta2[1:5]~dmnorm(betamu2[],Sigma2[,])
+r1~dnorm(0, 0.01)
+r2~dnorm(0, 0.01)
+r3~dnorm(0,0.01)
+}
+
+
+
+
+# WinBUGS 1.4 code for joint time-varying model (Model XII in Guo and 
+#   Carlin paper) 
+
+model{
+
+for (i in 1:N) {
+    for (j in 1:M) {
+       Y[i, j] ~ dnorm(muy[i, j], tauz)
+       muy[i, j]<-beta1[1]+beta1[2]*t[j]+beta1[3]*t[j]*randgrp1[i]+
+                     beta1[4]*gender1[i]+beta1[5]*prevoi1[i]+beta1[6]*stratum1[i]+U[i,1]+U[i,2]*t[j]
+    }
+    
+    # Original code - here the mean of the Weibull is associated with longitudinal value at the event/censoring time.
+    # This does not mean the hazard at t is associated with longitudinal value at t, as described in Equation (2) and (4) of Guo and Carlin
+    #surt[i] ~ dweib(p,mut[i]) I(surt.cen[i],)
+    #log(mut[i])<-beta2[1]+beta2[2]*randgrp1[i]+beta2[3]*gender1[i]+
+    #                beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i, 1]+r2*U[i, 2]+r3*(U[i,1]+U[i,2]*tee[i])
+   
+    # Code that allows the hazard to be related directed to intercept, slope, and underlying longitudinal value
+    # To specify the likelihood, we use the ones trick
+    ones[i] <- 1	    
+    q[i]<-L[i]/C	
+    ones[i]~dbern(q[i])
+    ## Likelihood for survival data - event=1 if event, and 0 if censoring
+    L[i]<-pow(f[i],event[i])*pow(S[i],1-event[i]) 
+
+    ## Hazard for individual i at their survival time
+    h[i]<-exp(beta2[1]+beta2[2]*randgrp1[i]+beta2[3]*gender1[i]+
+                    beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i, 1]+r2*U[i, 2]+r3*(U[i,1]+U[i,2]*tee[i]))
+	
+    ## Cumulative hazard H[t] = int_0^t (h[u] du)  = [ 1/(r3*U[i,2]) * h[u] ]_0^t
+    ## H[t] = 1/(r3*U[i,2]) * (h[t]-h[0])
+    ## Cumulative hazard for individual i at their survival time
+    H[i]<-1/(r3*U[i,2]) * (h[i]-exp(beta2[1]+beta2[2]*randgrp1[i]+beta2[3]*gender1[i]+
+                    beta2[4]*prevoi1[i]+beta2[5]*stratum1[i]+r1*U[i, 1]+r2*U[i, 2]+r3*U[i,1]))
+    ## Survival probability for individual i at their survival time
+    S[i]<-exp(-H[i])
+    ## Density function
+    f[i]<-h[i]*S[i]
+	
+    U[i,1:2] ~ dmnorm(U0[],tau[,])
+   }  
+
+C<-10000
+#p <- 1                  #  Use this for Exponential model
+#p ~ dgamma(1,1)  #  Use this for full Weibull model
+
+sigmaz<-1/tauz
+sigma[1:2,1:2]<-inverse(tau[,])
+sigma1<-sigma[1,1]
+sigma2<-sigma[2,2]
+sigma12<-sigma[1,2]
+cor<-sigma12/(sqrt(sigma1*sigma2))
+
+#priors
+tau[1:2,1:2] ~ dwish(R[,], 23)
+beta1[1:6]~dmnorm(betamu1[],Sigma1[,])
+tauz~dgamma(0.1, 0.1)
+beta2[1:5]~dmnorm(betamu2[],Sigma2[,])
+r1~dnorm(0, 0.01)
+r2~dnorm(0, 0.01)
+r3~dnorm(0,0.01)
+}

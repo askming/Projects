@@ -102,20 +102,48 @@ testdata = sim_multiple_data(N=500, alpha=c(1,1), tau=0.25)
 t2=Sys.time()
 t2-t1
 
-# check = function(data, ind1, ind2, var, fun, ...){
+check = function(data, ind1, ind2, var, fun, ...){
 	# function used to check the simulated data
-	# var = data[[ind1]][[ind2]][[var]]
-	# fun(var, ...)
-# }
+	var = data[[ind1]][[ind2]][[var]]
+	fun(var, ...)
+}
 
 # check(testdata, 8, 2, 'event', fun=table)
 
 
+########################################################################
+---------------------------- 2. run the model --------------------------
+########################################################################
+library(R2jags)
+
+QRJM_jags<-function(data,tau,I=250){
+	setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")
+	model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM.txt"
+	# file.show(model)
+	y = data[[2]][['y']]
+	X = data[[2]][['X']]
+	J = data[[2]][['J']]
+	event =  data[[2]][['event']]
+
+	Ti = data[[1]][['Ti']]
+	H = data[[1]][['H']]
+	W = data[[1]][['W']]
+
+	jags.data = list(y=y, X=X, H=H, W=W, Ti=Ti, event=event, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)
+ 	jags.params = c("beta", "delta","gamma","alpha1","alpha2","sigma")
+ 	jags.inits = function(){	list(beta=c(0.1,0.1), delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sigma=0.1, alpha1=0.1, alpha2=0.1)	
+  	}	
+
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=20000, n.burnin=10000, model.file=model)	
+}
 
 
 
+testfit = QRJM_jags(testdata[[1]], tau=0.25)
 
-
+print(testfit)
+traceplot(testfit)
+xyplot(as.mcmc(testift))
 
 
 
