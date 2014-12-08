@@ -1,0 +1,99 @@
+model {
+  for (i in 1:obs)  # obs: number of total observations
+  {
+    w1[i] ~ dgamma(nu,nu)
+    Y.conti[i] ~ dnorm(mu.conti[i], taudy[i]) # continuous outcome
+    taudy[i]<-w1[i]*tau.conti
+    # two ordinal outcomes
+    Y.ordi.1[i] ~ dcat(prob.y.1[i, 1:n.1])
+    Y.ordi.2[i] ~ dcat(prob.y.2[i, 1:n.2])
+}
+  # construct ST distribution on the mean of the continuous outcome
+  for (i in 1:obs)
+{
+  mu.conti[i] <- a.conti + b.conti * theta[i] + delta.sn*(w.sn[subject[i]])
+}
+    # Construct the probability vector for the ordinal variables
+    for (i in 1:obs)
+{
+for (l in 1:(n.1-1)) { logit(psi.1[i, l]) <- a.ordi.1[l] - b.ordi.1*theta[i] }
+prob.y.1[i, 1] <- psi.1[i, 1]
+for (l in 2:(n.1-1)) { prob.y.1[i, l] <- psi.1[i, l] - psi.1[i, l-1] }
+prob.y.1[i, n.1] <- 1 - psi.1[i,(n.1-1)]
+for (l in 1:(n.2-1)) { logit(psi.2[i, l]) <- a.ordi.2[l] - b.ordi.2*theta[i] }
+prob.y.2[i, 1] <- psi.2[i, 1]
+for (l in 2:(n.2-1)) { prob.y.2[i, l] <- psi.2[i, l] - psi.2[i, l-1] }
+prob.y.2[i, n.2] <- 1 - psi.2[i,(n.2-1)]
+}
+
+  for (i in 1:N)
+    {
+    # construct random effects
+    u[i, 1:2] ~ dmnorm(zero[], precision[,])
+    # construct variable for the skewness parameter
+    w.sn[i]~dnorm(0,1)I(0,)
+}
+  # construct the variance-covariance matrix for random effects
+  precision[1:2,1:2]<-inverse(sigma[,])
+  sigma[1,1]<-1
+  sigma[1,2]<-rho*sig1
+  sigma[2,1]<-sigma[1,2]
+  sigma[2,2]<-sig1*sig1
+# construct theta, the latent variable of subject i at time j
+for (i in 1:obs)
+{
+   theta[i] <- u[subject[i], 1] + (beta[1] + beta[2]*treat[i]
+               + u[subject[i], 2])*t[i]
+}
+  # construct survival part
+  for (i in 1:N)
+  {
+    # use zero-trick to specify the likelihood
+    phi[i] <- -lL[i]
+    zeros[i] ~ dpois(phi[i])
+    # k is the number of time interval for baseline step function
+    for (k in 1:3) {
+      h0[i,k] <- inprod(g[k],I0[i,k])
+      gt[i,k] <- inprod(g[k],dt1[i,k])
+    }
+## take log of the survival function
+    lh[i] <- gam*treat.pts[i] + omega2*u[i, 1] + omega3*u[i,2] + log(sum(h0[i,]))
+    lS[i] <- -(exp(gam*treat.pts[i] + omega2*u[i, 1] + omega3*u[i,2])*sum(gt[i,]))
+    # event=1 for event; 0 for censored
+    lL[i] <- event[i]*lh[i] + lS[i] -log(1.0E+08)
+}
+
+# prior for g
+for (k in 1:3)
+{
+  g[k] ~dunif(0,20)
+}
+# prior for parameters gam, omega2, and omega3
+gam ~ dnorm(0, 0.01)
+omega2 ~ dnorm(0, 0.01)
+omega3 ~ dnorm(0, 0.01)
+# prior for regression coefficients
+for (i in 1:2)
+{
+    beta[i] ~ dnorm(0, 0.01)
+}
+# specify prior distributions
+rho ~ dunif(-1, 1)
+sig1 ~  dgamma(0.01, 0.01)
+# prior for continuous variable’s parameters
+b.conti ~ dgamma(0.001,0.001)
+a.conti ~ dnorm(0, 0.0005)
+tau.conti ~ dgamma(0.001,0.001)
+sd.conti <- 1/sqrt(tau.conti)
+b.ordi.1 ~ dgamma(0.001,0.001)
+b.ordi.2 ~ dgamma(0.001,0.001)
+a.ordi.1[1] ~ dnorm(0,0.001)
+for (l in 2:(n.1-1)) { a.ordi.1[l] <- a.ordi.1[l-1] + delta.1[l-1] }
+for (i in 1:(n.1-2)) {delta.1[i] ~ dnorm(0,0.01)I(0,) }
+a.ordi.2[1] ~ dnorm(0,0.001)
+for (l in 2:(n.2-1)) { a.ordi.2[l] <- a.ordi.2[l-1] + delta.2[l-1] }
+for (i in 1:(n.2-2)) {delta.2[i] ~ dnorm(0,0.01)I(0,) }
+# prior distribution for df and skewness parameters
+nu~dgamma(0.001,0.001)
+delta.sn~dnorm(0,0.001)I(0,)
+}

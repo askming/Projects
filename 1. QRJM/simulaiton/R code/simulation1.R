@@ -17,9 +17,11 @@ sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){
 	Time = numeric(n)
 	S = runif(n) # survival probability
 	H = matrix(rnorm(2*n), ncol=2)
+	W = matrix(rnorm(n*2), ncol=2)
+	# random effects
 	U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))
 	attributes(U)[[2]]=NULL # remove 'dimnames' attribute
-	W = matrix(rnorm(n*2), ncol=2)
+
 	
 	if (alpha[1]==0 & alpha[2]==0){
 		for (i in 1:n){
@@ -28,24 +30,29 @@ sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){
 	}
 	
 	else{
-		for (i in 1:n){
-			B = alpha[1] * delta[1] * H[i,1] + alpha[2] * U[i,1] + gamma %*% W[i,]
-			A = alpha[2] * U[i,2] + alpha[1] * delta[2] * H[i,2]
-			Time[i] = log(1-log(S[i])*A/exp(B))/A
-		}
-	}	
+		B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)
+		# print(length(B))
+		A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]
+		# print(length(A))
+		Time = log(1-log(S)*A/exp(B))/A 
+	}
+
 	Ti_id = which(!is.na(Time))
 	Time=Time[Ti_id][1:250]
+	Ci = rbeta(250, 4, 1)*2 # censoring time
+	Ti = pmin(Time, Ci)
+	event = as.numeric(Time == Ti)
 	U=U[Ti_id, ][1:250, ]
 	H=H[Ti_id, ][1:250, ]
 	W=W[Ti_id, ][1:250, ]
 		
-	list(Ti=Time, H=H, U=U, W=W)	
+	list(Ti=Ti, event=event, H=H, U=U, W=W)	
 }
 
 ####### try it #######
 surdata = sim_Ti(alpha=c(1,1))
 # when A is negative there may be no solution for t, so remove those observations
+# table(surdata$event)/250
 
 
 ###############################################################
@@ -64,7 +71,7 @@ sim_longitudinal_data = function(survival_data=surdata, n=250, time=c(0, 0.25, 0
 	H = survival_data$H
 	X = cbind(1, rnorm(n))
 	count = sapply(Ti, function(x) sum(x > time)) # number of observations after drop-outs
-	event = as.numeric(count != 6) # 1 for event, 0 for censoring
+	# event = as.numeric(count != 6) # 1 for event, 0 for censoring
 
 	for (i in 1:n){
 		for (j in 1:count[i]){
@@ -73,7 +80,7 @@ sim_longitudinal_data = function(survival_data=surdata, n=250, time=c(0, 0.25, 0
 		}	
 	}
 	
-	list(y = y, X = X, J=count, event=event)		
+	list(y = y, X = X, J=count)		
 }
 
 longidata = sim_longitudinal_data(surdata, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau=0.25)
@@ -108,7 +115,7 @@ check = function(data, ind1, ind2, var, fun, ...){
 	fun(var, ...)
 }
 
-# check(testdata, 8, 2, 'event', fun=table)
+# check(testdata, 18, 1, 'event', fun=table)
 
 
 ########################################################################
@@ -123,27 +130,29 @@ QRJM_jags<-function(data,tau,I=250){
 	y = data[[2]][['y']]
 	X = data[[2]][['X']]
 	J = data[[2]][['J']]
-	event =  data[[2]][['event']]
-
+	
 	Ti = data[[1]][['Ti']]
 	H = data[[1]][['H']]
 	W = data[[1]][['W']]
+	event =  data[[1]][['event']]
 
 	jags.data = list(y=y, X=X, H=H, W=W, Ti=Ti, event=event, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)
  	jags.params = c("beta", "delta","gamma","alpha1","alpha2","sigma")
  	jags.inits = function(){	list(beta=c(0.1,0.1), delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sigma=0.1, alpha1=0.1, alpha2=0.1)	
   	}	
 
-  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=20000, n.burnin=10000, model.file=model)	
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)	
 }
 
 
-
+t11=Sys.time()
 testfit = QRJM_jags(testdata[[1]], tau=0.25)
+t22=Sys.time()
+t22-t11
 
-print(testfit)
-traceplot(testfit)
-xyplot(as.mcmc(testift))
+print(testfit) # summary output
+traceplot(testfit) # traceplot
+xyplot(as.mcmc(testfit))# 
 
 
 
