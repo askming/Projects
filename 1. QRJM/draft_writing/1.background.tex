@@ -1,46 +1,47 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{fullpage}
-\usepackage {setspace}
-\usepackage[hang,flushmargin]{footmisc} %control footnote indent
-\usepackage{url} % for website links
-\usepackage{amssymb,amsmath}%for matrix
-\usepackage{graphicx}%for figure
-\usepackage{appendix}%for appendix
-\usepackage{float}
-\usepackage{multirow}
-\usepackage{longtable}
-\usepackage{morefloats}%in case there are too many float tables and figures
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{listings}
-\captionsetup[subtable]{font=normal}
-\usepackage{color}
-\usepackage{hyperref}
+% \documentclass{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage{fullpage}
+% \usepackage {setspace}
+% \usepackage[hang,flushmargin]{footmisc} %control footnote indent
+% \usepackage{url} % for website links
+% \usepackage{amssymb,amsmath}%for matrix
+% \usepackage{graphicx}%for figure
+% \usepackage{appendix}%for appendix
+% \usepackage{float}
+% \usepackage{multirow}
+% \usepackage{longtable}
+% \usepackage{morefloats}%in case there are too many float tables and figures
+% \usepackage{caption}
+% \usepackage{subcaption}
+% \usepackage{listings}
+% \captionsetup[subtable]{font=normal}
+% \usepackage{color}
+% \usepackage{hyperref}
+% \usepackage[round]{natbib}
 
-%\usepackage{Sweave}
-\setlength{\parindent}{0em}
-\setlength{\parskip}{0.5em}
-
-
-\graphicspath{{0.plots/}}
+% %\usepackage{Sweave}
+% \setlength{\parindent}{0em}
+% \setlength{\parskip}{0.5em}
 
 
+% \graphicspath{{0.plots/}}
 
-\begin{document}
+
+
+% \begin{document}
 
 
 \section{Background}
-Longitudinal studies are ubiquitous in biostatistics context. As a typical example, in randomized clinical trials (RCTs), patients are randomly allocated into different treatment arms and followed over time. Repeated measurements of interest will then be taken from those patients at designed follow-up time points. One of the important features of longitudinal data is that repeated measurements from the same subject are more ``similar'' to each other compared to those measures from different subjects, i.e. within subject measures tend to be intercorrelated. This feature requires special statistical techniques to handle the correlation thus valid scientific inference can be drawn from the data. As discussed in \cite{diggle2002analysis}, there are mainly three methods we can use to analyze longitudinal data: marginal model, transition model and random effects model. Different models lead to different interpretations of the regression coefficients and the choice of a model depends on objectives of the study, the source of correlation as well as the areas where they can be applied. In this work we will focus on applying random effects model to longitudinal data. A model that contains both random effects and fixed effects is called mixed effects model. The mixed effects model methodology, first introduced by R.A. Fisher \cite{fisher1919xv},  is a statistical tool that is used across a wide variety of disciplines including biostatistical contexts. Mixed effects models are especially popular in researches involving repeated measurements or observations from multilevel (or hierarchical) structure where the correlation between observations is not negligible as discussed above.\par
+Longitudinal studies are ubiquitous in biostatistics context. As a typical example, in randomized clinical trials (RCTs), patients are randomly allocated into different treatment arms and followed over time. Repeated measurements of interest will then be taken from those patients at designed follow-up time points. One of the important features of longitudinal data is that repeated measurements from the same subject are more ``similar'' to each other compared to those measures from different subjects, i.e. within subject measures tend to be intercorrelated. This feature requires special statistical techniques to handle the correlation thus valid scientific inference can be drawn from the data. As discussed in \citep{diggle2002analysis}, there are mainly three methods we can use to analyze longitudinal data: marginal model, transition model and random effects model. Different models lead to different interpretations of the regression coefficients and the choice of a model depends on objectives of the study, the source of correlation as well as the areas where they can be applied. In this work we will focus on applying random effects model to longitudinal data. A model that contains both random effects and fixed effects is called mixed effects model. The mixed effects model methodology, first introduced by R.A. Fisher \citep{fisher1919xv},  is a statistical tool that is used across a wide variety of disciplines including biostatistical contexts. Mixed effects models are especially popular in researches involving repeated measurements or observations from multilevel (or hierarchical) structure where the correlation between observations is not negligible as discussed above.\par
 
 Linear mixed model (LMM) is a widely used application of mixed effects methods. In brief, LMM models the expected value of the outcome and assumes observations from the same subject share a same latent variable, i.e. random effect, to account for the correlation among those observations. When conditional random effects, those observations are assumed to be independently distributed.
 
-Despite the popularity of LMM, in many circumstance, i.e. when there exits outliers or skewness in the outcome,  the normality assumption of the error term can not be satisfied (even after trying various ways of transformation) thus LMM is not appropriate to use. In other cases, the conditional mean may not be the primary interest and researchers may also interested the covariate effects on the lower/upper quantiles of the outcome. Quantile regression is a single method that can fit all above needs at once and it's becoming more and more popular in the statistical community in recent years. Compared with the ubiquitous mean regression (a.n.a. linear regression) models, quantile regression models provide a much more comprehensive and focused insight into the association between the variables by studying the conditional quantiles functions of the outcome,  which may not be observed by looking only at conditional mean models \cite{koenker2005quantile}. In quantile regression, the regression coefficients (${\bf \beta}$) are functions of the quantile ($\tau$), and their estimates vary according to different quantiles. Thus quartile regression provides a way to studying the heterogeneity of the outcome that is associated with the covariates \cite{koenker2005quantile}. Moreover, as mentioned above, quantile regression is more robust against outliers in the outcome compared with the mean regression, which is an immediate extension from the property of quantiles. \par
+Despite the popularity of LMM, in many circumstance, i.e. when there exits outliers or skewness in the outcome,  the normality assumption of the error term can not be satisfied (even after trying various ways of transformation) thus LMM is not appropriate to use. In other cases, the conditional mean may not be the primary interest and researchers may also interested the covariate effects on the lower/upper quantiles of the outcome. Quantile regression is a single method that can fit all above needs at once and it's becoming more and more popular in the statistical community in recent years. Compared with the ubiquitous mean regression (a.n.a. linear regression) models, quantile regression models provide a much more comprehensive and focused insight into the association between the variables by studying the conditional quantiles functions of the outcome,  which may not be observed by looking only at conditional mean models \citep{koenker2005quantile}. In quantile regression, the regression coefficients (${\bf \beta}$) are functions of the quantile ($\tau$), and their estimates vary according to different quantiles. Thus quartile regression provides a way to studying the heterogeneity of the outcome that is associated with the covariates \citep{koenker2005quantile}. Moreover, as mentioned above, quantile regression is more robust against outliers in the outcome compared with the mean regression, which is an immediate extension from the property of quantiles. \par
 
 
-For a linear quantile regression model, \cite{koenker1978regression} introduced a method in estimating the conditional quantiles. As an introductory material, Koenker \cite{koenker2001quantile} briefly covers the fundamentals of quantile regression, parameter estimation techniques, inference, asymptotic theory, etc., his book \cite{koenker2005quantile} provides more comprehensive and deeper introduction on quantile regression related topics.  Yu and Moyeed \cite{yu2001bayesian} introduced the idea of Bayesian quantile regression by modeling the error term using asymmetric Laplace distribution (ALD) followed the idea proposed in \cite{koenker1978regression}. \cite{kozumi2011gibbs} developed a Gibbs sampling algorithm for Bayesian quantile regression models, in which they used a location-scale mixture representation of the ALD. Many works have been done to extend the quantile regression method to accommodate longitudinal data. \cite{jung1996quasi} developed a quansi-likehood method for median regression model for longitudinal data. \cite{geraci2007quantile} proposed to fit the quantile regression for longitudinal data based on ALD and the estimation is made by using Monte Carlo EM algorithm, later on \cite{liu2009mixed} followed the idea of \cite{geraci2007quantile} and extended the model from random intercept to include random regression coefficients as well. \cite{fu2012quantile} proposed  a working correlation model for quantile regression for longitudinal data, a induced smoothing method was used to make the inference of the estimators. Fully Bayesian techniques were also developed for fitting linear quantile mixed models, for example \cite{luo2012bayesian} used the similar idea as \cite{kozumi2011gibbs} did in decomposing the error term as a location-scale mixture and developed a Gibbs sampling algorithm for quantile linear mixed model. The fully Bayesian method is appealing because it is easy to implement and to make inference, the uncertainty of the unknowns is taken into account, and it is flexible in the distribution of random effects. The detailed background about Bayesian quantile linear mixed model will be introduced in Section \ref{sec:BLQMM}.\par
+For a linear quantile regression model, \citep{koenker1978regression} introduced a method in estimating the conditional quantiles. As an introductory material, Koenker \citep{koenker2001quantile} briefly covers the fundamentals of quantile regression, parameter estimation techniques, inference, asymptotic theory, etc., his book \citep{koenker2005quantile} provides more comprehensive and deeper introduction on quantile regression related topics.  Yu and Moyeed \citep{yu2001bayesian} introduced the idea of Bayesian quantile regression by modeling the error term using asymmetric Laplace distribution (ALD) followed the idea proposed in \citep{koenker1978regression}. \citep{kozumi2011gibbs} developed a Gibbs sampling algorithm for Bayesian quantile regression models, in which they used a location-scale mixture representation of the ALD. Many works have been done to extend the quantile regression method to accommodate longitudinal data. \citep{jung1996quasi} developed a quansi-likehood method for median regression model for longitudinal data. \citep{geraci2007quantile} proposed to fit the quantile regression for longitudinal data based on ALD and the estimation is made by using Monte Carlo EM algorithm, later on \citep{liu2009mixed} followed the idea of \citep{geraci2007quantile} and extended the model from random intercept to include random regression coefficients as well. \citep{fu2012quantile} proposed  a working correlation model for quantile regression for longitudinal data, a induced smoothing method was used to make the inference of the estimators. Fully Bayesian techniques were also developed for fitting linear quantile mixed models, for example \citep{luo2012bayesian} used the similar idea as \citep{kozumi2011gibbs} did in decomposing the error term as a location-scale mixture and developed a Gibbs sampling algorithm for quantile linear mixed model. The fully Bayesian method is appealing because it is easy to implement and to make inference, the uncertainty of the unknowns is taken into account, and it is flexible in the distribution of random effects. The detailed background about Bayesian quantile linear mixed model will be introduced in Section \ref{sec:BLQMM}.\par
 
-Another concern that frequently arises from longitudinal study is that the subjects may be lost at follow up due to events. Such cases are called informative drop-outs (ID) when the event occurrences are associated with the longitudinal outcome. Simply ignore the missing mechanism can lead to biased estimates of the parameters in the longitudinal model. The informative drop-out problem has attracted much attention from the statisticians and a wide array of methods have been proposed to handle this issue \cite{diggle1994informative} \cite{lipsitz1997quantile} \cite{touloumi2003comparison} \cite{yuan2010bayesian}. For more information in this research area, there are several good review papers of modeling longitudinal data with non-ignorable drop-outs, including \cite{diggle2007analysis} and \cite{hogan2004handling}. \emph{[To-do: put some review of previous work and their limitations and propose our model then state the advantage.]}
+Another concern that frequently arises from longitudinal study is that the subjects may be lost at follow up due to events. Such cases are called informative drop-outs (ID) when the event occurrences are associated with the longitudinal outcome. Simply ignore the missing mechanism can lead to biased estimates of the parameters in the longitudinal model. The informative drop-out problem has attracted much attention from the statisticians and a wide array of methods have been proposed to handle this issue \citep{diggle1994informative} \citep{lipsitz1997quantile} \citep{touloumi2003comparison} \citep{yuan2010bayesian}. For more information in this research area, there are several good review papers of modeling longitudinal data with non-ignorable drop-outs, including \citep{diggle2007analysis} and \citep{hogan2004handling}. \emph{[To-do: put some review of previous work and their limitations and propose our model then state the advantage.]}
 
 
 \par
@@ -58,61 +59,7 @@ To sum up, this research project focuses on developing and applying new statisti
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%% insert figure %%%%%%%%%%%%%%
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[scale=0.2]{figure.jpg}
-%\caption{An example figure.}
-%\end{center}
-%\end{figure}
-%
-%
-%All is done in \LaTeX \cite{knuth1986texbook}.
-%
-%
-\bibliographystyle{plain}%%%%%%%%%%%%%%%%%%%%
-\addcontentsline{toc}{section}{References}
-\bibliography{QRJM}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\end{document}
+% \bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
+% \addcontentsline{toc}{section}{References}
+% \bibliography{QRJM}
+% \end{document}

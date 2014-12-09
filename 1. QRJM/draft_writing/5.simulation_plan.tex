@@ -1,0 +1,147 @@
+% \documentclass{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage{fullpage}
+% \usepackage {setspace}
+% \usepackage[hang,flushmargin]{footmisc} %control footnote indent
+% \usepackage{url} % for website links
+% \usepackage{amssymb,amsmath}%for matrix
+% \usepackage{graphicx}%for figure
+% \usepackage{appendix}%for appendix
+% \usepackage{float}
+% \usepackage{multirow}
+% \usepackage{longtable}
+% \usepackage{morefloats}%in case there are too many float tables and figures
+% \usepackage{caption}
+% \usepackage{subcaption}
+% \usepackage{listings}
+% \captionsetup[subtable]{font=normal}
+% \usepackage{color}
+% \usepackage{hyperref}
+% \usepackage[round]{natbib}
+
+
+% %\usepackage{Sweave}
+% \setlength{\parindent}{0em}
+% \setlength{\parskip}{0.5em}
+
+
+% \graphicspath{{0.plots/}}
+
+
+
+% \begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Plan for simulation study} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The simulation study is designed to check the validity of our propsed joint model in modeling the longitudinal outcome and the informative drop-out event time. Our focus of the simulation results lies on the accuracy of our estimation, i.e. bias, and the precision, i.e. standard deviation, of the samples from posterior distribution. Comparision will be made between our posprosed model against the model that simply ignores the underlying informative drop-out mechanism.
+
+\begin{equation}\label{eqn:joint}
+\left\{
+\begin{array}{l}
+y_{it} = \boldsymbol{\beta}^{\top}{\boldsymbol X}_{it} + \boldsymbol{\delta}^{\top}{\boldsymbol H}_{it} + {\boldsymbol u}_i^{\top}{\boldsymbol Z}_{it} + \varepsilon_{it} =\overset{\sim}{\tau}_{it} + \varepsilon_{it}\\
+h(T_i|\mathcal{T}_{iT_i}, {\boldsymbol W}_i;  \boldsymbol{\gamma}, \alpha_1, 
+\alpha_2) = h_0(T_i)\exp(\boldsymbol{\gamma}^{\top}{\boldsymbol W}_i + \alpha_1\boldsymbol{\delta}^{\top}{\boldsymbol H}_{iT_i} + \alpha_2{\boldsymbol u}_i^{\top}{\boldsymbol Z}_{iT_i})
+\end{array}
+\right.
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simulation settings }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Following \citep{farcomeni2014longitudinal}, by varying the values of the association parameters $\alpha_1$ and $\alpha_2$ in our model (\ref{eqn:joint}), we will have four different settings of simulation study, which are:
+
+\begin{enumerate}
+\item $(\alpha_1, \alpha_2)=(0, 0)$, the two models are indepdent with each other
+\item $(\alpha_1, \alpha_2)=(1, 0)$, the two models are related only through the observed heterogeneity in some covarites, ${\boldsymbol H}_{it}$ in our model
+\item $(\alpha_1, \alpha_2)=(0, 1)$, the two models are related only through the unobserved heterogeneity, i.e. the random effects
+\item $(\alpha_1, \alpha_2)=(1, 1)$, the depdence of the two models is explained by both observed and unobserved heterogeneity
+\end{enumerate}
+
+
+In model (\ref{eqn:joint}) note that we have specific covariates ${\boldsymbol X}_{it}$ only for the longitudinal model and covariates ${\boldsymbol W}_{it}$ only for the survival model.
+
+
+Under different combinations of ($\alpha_1$, $\alpha_2$), for the regression coefficients we choose $\boldsymbol{\beta, \delta, \gamma}=(1, 1)^{\top}$, the covriates ${\boldsymbol Z}_{it}=(1, t)^{\top},\hspace{0.5em} {\boldsymbol H}_{it}=(h_{i1}, h_{i2}*t)^{\top},\hspace{0.5em} {\boldsymbol X}_{it}=(1, x_i)^{\top},\mbox{ and }\hspace{0.5em} {\boldsymbol W}_{i}=(w_{i1}, w_{i2})^{\top}$ with $h_{i1}, h_{i2}, x_i, w_{i1}$ and $w_{i2}$ generated from independent standard normal distributions, and the random effects  $\boldsymbol{u}_i$ from bivariate normal with mean 0, standard deviations equal 0.3 and correlation 0.16. We also fix $\sigma=1$ and vary the quantile $\tau$ among $\{0.25, 0.5, 0.75\}$ for the ALD specification when simulating longitudinal data.
+
+To simulate the survival time data, for simplicity, we fix $h_0(s)=1$ and obtain the survival distribution as 
+
+\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i)=\exp\left\{-\frac{e^{\alpha_1(\delta_1H_{i1}+\delta_2H_{i2t}) + \alpha_2(u_{i1}+u_{i2}t) + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i} - e^{\alpha_1\delta_1H_{i1}+\alpha_2u_{i1} + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}}{\alpha_2u_{i2}+\alpha_1\delta_2h_i}\right\}\] when $\alpha_1\ne0$ or $\alpha_2\ne0$ and 
+
+\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i) =  \exp\{-te^{\boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}\}\]
+when $\alpha_1=\alpha_2=0.$ We then can obtain event time $T_i$ by inverting above survival function after generating $n$ random variates from standard uniform distribution. To obtain a censoring proportion around 25\%, we choose the censoring time $C_i/5$ be distributed according to $beta(4,1)$ . \par
+
+To simulate the longitudinal data, we draw them independently from the ALD for the $\tau-$th quantile, centered on 
+\[\boldsymbol{\beta}^{\top}{\boldsymbol X}_{it} + \boldsymbol{\delta}^{\top}{\boldsymbol H}_{it} + {\boldsymbol u}_i^{\top}{\boldsymbol Z}_{it},\] and with dispersion parameter $\sigma$. We keep maximum six observations for each subject at follow-up time $t=(0, 0.25, 0.5, 0.75, 1, 3)$ respectively, after incorporating the drop-out information.
+
+
+
+
+\section{Result}
+%%%%%%%%%%%%% insert table %%%%%%%%%%%%%%
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccccccccccc}
+\hline
+\multicolumn{13}{c}{$\tau$=0.25}\\
+\hline
+&&&\multicolumn{2}{c}{$\boldsymbol{\beta}$}&\multicolumn{2}{c}{$\boldsymbol{\delta}$}&\multicolumn{2}{c}{$\boldsymbol{\gamma}$}&\multicolumn{2}{c}{$\alpha_1$}&\multicolumn{2}{c}{$\alpha_2$}\\
+n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. \\
+250 & 0 & 0 & & & & & & & & & &\\
+250 & 0 & 1 & & & & & & & & & &\\
+250 & 1 & 0 & & & & & & & & & &\\
+250 & 1 & 1 & & & & & & & & & &\\
+\hline
+\end{tabular}
+\caption{\label{tab:widgets}An example table.}
+\end{table}
+
+
+
+
+
+
+
+%%%%%%%%%%%%% insert figure %%%%%%%%%%%%%%
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[scale=0.2]{figure.jpg}
+%\caption{An example figure.}
+%\end{center}
+%\end{figure}
+%
+%
+%All is done in \LaTeX \cite{knuth1986texbook}.
+%
+%
+% \bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
+% \addcontentsline{toc}{section}{References}
+% \bibliography{QRJM}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \end{document}
