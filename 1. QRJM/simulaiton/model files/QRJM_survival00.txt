@@ -1,0 +1,17 @@
+model{
+	for (i in 1:I){
+		# survival process, baseline hazard is set to 1
+		h[i] <- c*exp(inprod(gamma, W[i,]))
+		S[i] <- exp(-Ti[i]*c*exp(inprod(gamma, W[i,])))
+		L[i] <- pow(h[i], event[i])*S[i]/1.0E+08
+
+		# zero trick
+		phi[i] <- -log(L[i])
+		zeros[i] ~ dpois(phi[i])
+	}#end of i loop
+
+	# priors for other parameters
+	gamma[1] ~ dnorm(0, 0.001)
+	gamma[2] ~ dnorm(0, 0.001)
+	c ~ dunif(0.01, 10)
+}

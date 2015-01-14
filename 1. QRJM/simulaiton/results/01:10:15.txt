@@ -1,0 +1,39 @@
+case three
+
+30 datasets, two random effects, no H, INLA, 1 hour
+
+> summ(result)
+[[1]]
+b1.X1 b2.X2 g1.W1 g2.W2 
+0.928 0.948 0.980 0.986 
+
+[[2]]
+b1.X1 b2.X2 g1.W1 g2.W2 
+0.206 0.202 0.095 0.092 
+
+[[3]]association for U1 and U2
+[1] 1.010 0.974 0.240 0.230
+
+
+case four
+
+30 datasets, two random effects, association in H and RE, INLA, 1.8 hours
+> sum(result)
+[[1]]
+b1.X1 b2.X2 g1.W1 g2.W2 
+0.922 1.028 1.008 1.002 
+
+[[2]]
+b1.X1 b2.X2 g1.W1 g2.W2 
+0.220 0.196 0.102 0.107 
+
+[[3]]
+Beta for idh12 Beta for idh22   Beta for U12   Beta for U22 
+         1.037          0.641          0.973          0.895 
+
+[[4]]
+Beta for idh12 Beta for idh22   Beta for U12   Beta for U22 
+         0.109          0.085          0.240          0.228 
+
+
+

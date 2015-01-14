@@ -1,0 +1,34 @@
+model{
+	zero[1] <- 0
+	zero[2] <- 0
+	k1 <- (1-2*qt)/(qt*(1-qt))
+	k2 <- 2/(qt*(1-qt))
+
+	for (i in 1:I){
+	# prior for random effects
+	u[i, 1:2] ~ dmnorm(zero[], precision[,])
+
+	# longitudinal process, BQR mixed model using ALD representation
+		for (j in 1:J[i]){
+			er[i,j] ~ dexp(sigma)
+			mu[i,j] <- u[i,1] + u[i,2]*t[j] + inprod(X[i,], beta[]) + delta[1]*H[i,1] + delta[2]*H[i,2]*t[j] + k1*er[i,j]
+			prec[i,j] <- sigma/(k2*er[i,j])
+			y[i,j] ~ dnorm(mu[i,j], prec[i,j])
+		} #end of j loop
+	} # end of i loop		
+
+	precision[1:2,1:2] <- inverse(Sigma[,])
+  	Sigma[1,1] <- 1
+  	Sigma[1,2] <- rho*sig1
+  	Sigma[2,1] <- Sigma[1,2]
+  	Sigma[2,2] <- sig1*sig1
+
+	# priors for other parameters
+	beta[1] ~ dnorm(0, 0.001)
+	beta[2] ~ dnorm(0, 0.001)
+	delta[1] ~ dnorm(0, 0.001)
+	delta[2] ~ dnorm(0, 0.001)
+	sigma ~ dgamma(0.001, 0.001)
+	rho ~ dunif(-1, 1)
+	sig1 ~  dgamma(0.01, 0.01)
+}	

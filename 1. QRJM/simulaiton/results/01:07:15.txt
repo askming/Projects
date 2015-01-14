@@ -1,0 +1,59 @@
+01/07/2015
+
+Cholesky model, 50K iterations and 25K burnin
+> post_summary(multi_fit11_30_05)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.034     0.806     0.988     0.997     0.975     0.983     1.006 12857.408 
+ gamma[1]  gamma[2]     sigma       w11       w22 
+    1.025     1.020     1.005     0.382     0.336 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.105    0.551    0.089    0.084    0.087    0.077    0.090   40.559 
+gamma[1] gamma[2]    sigma      w11      w22 
+   0.088    0.087    0.037    0.143    0.130 
+
+Cholesky model, 50K iterations and 25K burnin
+> post_summary(multi_fit01_30_05)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    0.003     0.851     0.989     1.000     0.978     0.985     1.008 13022.434 
+ gamma[1]  gamma[2]     sigma       w11       w22 
+    1.023     1.007     1.005     0.351     0.350 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.053    0.514    0.085    0.081    0.080    0.082    0.110   40.255 
+gamma[1] gamma[2]    sigma      w11      w22 
+   0.085    0.084    0.037    0.139    0.145 
+
+
+> post_summary(multi_fit11_30_75)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.020     0.619     0.970     0.993     0.975     0.997     1.010 13103.668 
+ gamma[1]  gamma[2]     sigma       w11       w22 
+    1.024     1.016     0.998     0.385     0.326 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.113    0.748    0.102    0.097    0.087    0.088    0.100   46.088 
+gamma[1] gamma[2]    sigma      w11      w22 
+   0.088    0.087    0.036    0.164    0.147 
+
+
+> post_summary(multi_fit01_30_75)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    0.016     0.730     0.998     1.012     0.986     0.995     0.993 13236.787 
+ gamma[1]  gamma[2]     sigma       w11       w22 
+    0.986     0.991     1.011     0.388     0.401 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.056    0.609    0.098    0.096    0.082    0.096    0.130   47.021 
+gamma[1] gamma[2]    sigma      w11      w22 
+   0.087    0.087    0.037    0.161    0.162 
+
+

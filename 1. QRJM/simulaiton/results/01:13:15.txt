@@ -1,0 +1,32 @@
+JAGS QRJM 30 datasets 500 sample size
+
+(0,1)
+> post_summary(multi_fit01_30_500_25)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+   -0.010     0.928     1.017     0.997     1.000     0.989     0.984 26430.445 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.006     0.997     1.001     0.306    -0.026     0.367 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.040    0.368    0.068    0.066    0.058    0.066    0.091   64.222 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.059    0.058    0.026    0.111    0.212    0.124 
+
+
+> post_summary(multi_fit11_30_500_25)
+(1,1)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.007     0.789     0.999     1.001     0.980     0.992     0.992 26237.008 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.023     1.016     1.000     0.335    -0.026     0.327 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.076    0.417    0.073    0.067    0.061    0.061    0.070   65.161 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.061    0.060    0.026    0.118    0.203    0.117 
+
+

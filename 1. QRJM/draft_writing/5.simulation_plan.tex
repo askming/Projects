@@ -1,35 +1,37 @@
-% \documentclass{article}
-% \usepackage[utf8]{inputenc}
-% \usepackage{fullpage}
-% \usepackage {setspace}
-% \usepackage[hang,flushmargin]{footmisc} %control footnote indent
-% \usepackage{url} % for website links
-% \usepackage{amssymb,amsmath}%for matrix
-% \usepackage{graphicx}%for figure
-% \usepackage{appendix}%for appendix
-% \usepackage{float}
-% \usepackage{multirow}
-% \usepackage{longtable}
-% \usepackage{morefloats}%in case there are too many float tables and figures
-% \usepackage{caption}
-% \usepackage{subcaption}
-% \usepackage{listings}
-% \captionsetup[subtable]{font=normal}
-% \usepackage{color}
-% \usepackage{hyperref}
-% \usepackage[round]{natbib}
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{setspace}
+\usepackage[hang,flushmargin]{footmisc} %control footnote indent
+\usepackage{url} % for website links
+\usepackage{amssymb,amsmath}%for matrix
+\usepackage{graphicx}%for figure
+\usepackage{appendix}%for appendix
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{morefloats}%in case there are too many float tables and figures
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\captionsetup[subtable]{font=normal}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+\usepackage{rotating} % rotate table by some degree
+\usepackage{rotfloat}
 
 
-% %\usepackage{Sweave}
-% \setlength{\parindent}{0em}
-% \setlength{\parskip}{0.5em}
+%\usepackage{Sweave}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
 
 
-% \graphicspath{{0.plots/}}
+\graphicspath{{0.plots/}}
 
 
 
-% \begin{document}
+\begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Plan for simulation study} 
@@ -67,7 +69,7 @@ Under different combinations of ($\alpha_1$, $\alpha_2$), for the regression coe
 
 To simulate the survival time data, for simplicity, we fix $h_0(s)=1$ and obtain the survival distribution as 
 
-\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i)=\exp\left\{-\frac{e^{\alpha_1(\delta_1H_{i1}+\delta_2H_{i2t}) + \alpha_2(u_{i1}+u_{i2}t) + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i} - e^{\alpha_1\delta_1H_{i1}+\alpha_2u_{i1} + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}}{\alpha_2u_{i2}+\alpha_1\delta_2h_i}\right\}\] when $\alpha_1\ne0$ or $\alpha_2\ne0$ and 
+\[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i)=\exp\left\{-\frac{e^{\alpha_1(\delta_1H_{i1}+\delta_2H_{i2t}) + \alpha_2(u_{i1}+u_{i2}t) + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i} - e^{\alpha_1\delta_1H_{i1}+\alpha_2u_{i1} + \boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}}{\alpha_2u_{i2}+\alpha_1\delta_2h_{i2}}\right\}\] when $\alpha_1\ne0$ or $\alpha_2\ne0$ and 
 
 \[S(t|\boldsymbol{u}_i, {\boldsymbol H}_{it}, {\boldsymbol W}_i) =  \exp\{-te^{\boldsymbol{\gamma}^{\top}\boldsymbol{W}_i}\}\]
 when $\alpha_1=\alpha_2=0.$ We then can obtain event time $T_i$ by inverting above survival function after generating $n$ random variates from standard uniform distribution. To obtain a censoring proportion around 25\%, we choose the censoring time $C_i/5$ be distributed according to $beta(4,1)$ . \par
@@ -76,26 +78,52 @@ To simulate the longitudinal data, we draw them independently from the ALD for t
 \[\boldsymbol{\beta}^{\top}{\boldsymbol X}_{it} + \boldsymbol{\delta}^{\top}{\boldsymbol H}_{it} + {\boldsymbol u}_i^{\top}{\boldsymbol Z}_{it},\] and with dispersion parameter $\sigma$. We keep maximum six observations for each subject at follow-up time $t=(0, 0.25, 0.5, 0.75, 1, 3)$ respectively, after incorporating the drop-out information.
 
 
-
-
 \section{Result}
+
 %%%%%%%%%%%%% insert table %%%%%%%%%%%%%%
-\begin{table}[H]
-\centering
-\begin{tabular}{ccccccccccccc}
+\small{
+\begin{center}
+\begin{sideways}
+\begin{tabular}{ccccccccccccccccccc}
 \hline
-\multicolumn{13}{c}{$\tau$=0.25}\\
+\multicolumn{19}{c}{$\tau$=0.25}\\
 \hline
-&&&\multicolumn{2}{c}{$\boldsymbol{\beta}$}&\multicolumn{2}{c}{$\boldsymbol{\delta}$}&\multicolumn{2}{c}{$\boldsymbol{\gamma}$}&\multicolumn{2}{c}{$\alpha_1$}&\multicolumn{2}{c}{$\alpha_2$}\\
-n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. \\
-250 & 0 & 0 & & & & & & & & & &\\
-250 & 0 & 1 & & & & & & & & & &\\
-250 & 1 & 0 & & & & & & & & & &\\
-250 & 1 & 1 & & & & & & & & & &\\
+&&&\multicolumn{2}{c}{${\beta_1}$}&\multicolumn{2}{c}{${\beta_2}$}&\multicolumn{2}{c}{${\delta_1}$}&\multicolumn{2}{c}{${\delta_2}$}&\multicolumn{2}{c}{${\gamma_1}$}&\multicolumn{2}{c}{${\gamma_2}$}&\multicolumn{2}{c}{$\alpha_1$}&\multicolumn{2}{c}{$\alpha_2$}\\
+n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d.& bias & s.d.& bias & s.d.& bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. \\
+250 & 0 & 0 & 0.05 & 0.108 & 0.00 & 0.106 & 0.02 & 0.108 & 0.00 & 0.131 & & & & & &&\\
+250 & 1 & 0 & 0.077 & 0.119 & 0.011 & 0.111 & 0.001 & 0.094 & 0.037 & 0.096 & 0.033 & 0.078 & 0.003 & 0.077 & 0.014 & 0.109 & 0.024 & 0.190\\
+250 & 0 & 1 & & & & & & & & & & & & & & & \\
+250 & 1 & 1 & & & & & & & & & & & & & & & \\
 \hline
+\multicolumn{19}{c}{$\tau$=0.5}\\
+\hline
+&&&\multicolumn{2}{c}{${\beta_1}$}&\multicolumn{2}{c}{${\beta_2}$}&\multicolumn{2}{c}{${\delta_1}$}&\multicolumn{2}{c}{${\delta_2}$}&\multicolumn{2}{c}{${\gamma_1}$}&\multicolumn{2}{c}{${\gamma_2}$}&\multicolumn{2}{c}{$\alpha_1$}&\multicolumn{2}{c}{$\alpha_2$}\\
+n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d.& bias & s.d.& bias & s.d.& bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. \\
+250 & 0 & 0 & 0.05 & 0.108 & 0.00 & 0.106 & 0.02 & 0.108 & 0.00 & 0.131 & & & & & &&\\
+250 & 1 & 0 & 0.077 & 0.119 & 0.011 & 0.111 & 0.001 & 0.094 & 0.037 & 0.096 & 0.033 & 0.078 & 0.003 & 0.077 & 0.014 & 0.109 & 0.024 & 0.190\\
+250 & 0 & 1 & & & & & & & & & & & & & & & \\
+250 & 1 & 1 & & & & & & & & & & & & & & & \\
+\hline
+\multicolumn{19}{c}{$\tau$=0.75}\\
+\hline
+&&&\multicolumn{2}{c}{${\beta_1}$}&\multicolumn{2}{c}{${\beta_2}$}&\multicolumn{2}{c}{${\delta_1}$}&\multicolumn{2}{c}{${\delta_2}$}&\multicolumn{2}{c}{${\gamma_1}$}&\multicolumn{2}{c}{${\gamma_2}$}&\multicolumn{2}{c}{$\alpha_1$}&\multicolumn{2}{c}{$\alpha_2$}\\
+n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d.& bias & s.d.& bias & s.d.& bias & s.d. & bias & s.d. & bias & s.d. & bias & s.d. \\
+250 & 0 & 0 & 0.05 & 0.108 & 0.00 & 0.106 & 0.02 & 0.108 & 0.00 & 0.131 & & & & & &&\\
+250 & 1 & 0 & 0.077 & 0.119 & 0.011 & 0.111 & 0.001 & 0.094 & 0.037 & 0.096 & 0.033 & 0.078 & 0.003 & 0.077 & 0.014 & 0.109 & 0.024 & 0.190\\
+250 & 0 & 1 & & & & & & & & & & & & & & & \\
+250 & 1 & 1 & & & & & & & & & & & & & & & \\
+\hline
+% \captionof{table}{Caption.}
+% \label{tab:sim1}  
 \end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
+\end{sideways}
+\end{center}
+}
+
+
+
+
+
 
 
 
@@ -115,9 +143,9 @@ n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d. & bias & s.d. & bias & s
 %All is done in \LaTeX \cite{knuth1986texbook}.
 %
 %
-% \bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
-% \addcontentsline{toc}{section}{References}
-% \bibliography{QRJM}
+\bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{section}{References}
+\bibliography{QRJM}
 
 
 
@@ -144,4 +172,4 @@ n & $\alpha_1$ & $\alpha_2$ & bias & s.d. & bias & s.d. & bias & s.d. & bias & s
 
 
 
-% \end{document}
+\end{document}

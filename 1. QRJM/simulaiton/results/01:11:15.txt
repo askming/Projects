@@ -1,0 +1,31 @@
+JAGS, when fix alpha2, 30 datasets. 25k and burn in 5K
+
+(0,1)
+> post_summary(multi_fit01_30_25)
+$mean
+   alpha1   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance  gamma[1] 
+    0.003     1.004     1.008     0.984     0.981     0.988 13257.558     1.025 
+ gamma[2]     sigma       w11       w21       w22 
+    1.013     1.005     0.355    -0.108     0.314 
+
+$sd
+  alpha1  beta[1]  beta[2]        c delta[1] delta[2] deviance gamma[1] 
+   0.056    0.097    0.093    0.082    0.094    0.122   45.371    0.086 
+gamma[2]    sigma      w11      w21      w22 
+   0.085    0.036    0.131    0.216    0.113 
+
+
+(1,1)
+> post_summary(multi_fit11_30_25)
+$mean
+   alpha1   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance  gamma[1] 
+    1.058     1.001     0.992     1.010     0.966     0.987 13085.142     0.995 
+ gamma[2]     sigma       w11       w21       w22 
+    1.015     1.006     0.367    -0.134     0.306 
+
+$sd
+  alpha1  beta[1]  beta[2]        c delta[1] delta[2] deviance gamma[1] 
+   0.113    0.100    0.094    0.090    0.086    0.098   45.099    0.087 
+gamma[2]    sigma      w11      w21      w22 
+   0.088    0.036    0.132    0.221    0.116 
+

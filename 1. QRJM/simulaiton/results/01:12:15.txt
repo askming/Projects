@@ -1,0 +1,29 @@
+JAGS_QRJM, alpha2 is fixed to 1, 100 datasets
+(1,1)
+
+$mean
+   alpha1   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance  gamma[1] 
+    1.046     0.990     0.997     0.968     0.983     1.001 13100.472     1.019 
+ gamma[2]     sigma       w11       w21       w22 
+    1.028     1.006     0.369    -0.100     0.316 
+
+$sd
+  alpha1  beta[1]  beta[2]        c delta[1] delta[2] deviance gamma[1] 
+   0.111    0.101    0.094    0.088    0.086    0.096   45.289    0.087 
+gamma[2]    sigma      w11      w21      w22 
+   0.088    0.036    0.132    0.214    0.116 
+
+
+
+(0,1)
+$mean
+   alpha1   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance  gamma[1] 
+    0.005     1.010     1.005     0.988     0.988     0.998 13238.439     1.005 
+ gamma[2]     sigma       w11       w21       w22 
+    1.001     1.008     0.372    -0.117     0.318 
+
+$sd
+  alpha1  beta[1]  beta[2]        c delta[1] delta[2] deviance gamma[1] 
+   0.057    0.097    0.094    0.083    0.094    0.124   45.673    0.085 
+gamma[2]    sigma      w11      w21      w22 
+   0.085    0.036    0.132    0.211    0.115 

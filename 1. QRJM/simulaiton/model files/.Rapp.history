@@ -1,0 +1,1005 @@
+qrfit = QRJM_jags(ald_data, tau=0.25)
+QRJM_jags = function(data,tau,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_QR.txt"#
+    # file.show(model)#
+    # load longitudinal data#
+    y = data[['y']]#
+    X = data[['X']]#
+    H = data[['H']]#
+    J = data[['J']]#
+    jags.data = list(y=y, X=X, H=H, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)#
+    jags.params = c("beta", "delta","sigma")#
+    jags.inits = function(){    list(beta=c(0.1,0.1), delta=c(0.1, 0.1), sigma=0.1) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+qrfit = QRJM_jags(ald_data, tau=0.25)
+print(testfit)
+print(qrfit)
+QRJM_jags = function(data,tau,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_QR.txt"#
+    # file.show(model)#
+    # load longitudinal data#
+    y = data[['y']]#
+    X = data[['X']]#
+    H = data[['H']]#
+    J = data[['J']]#
+    jags.data = list(y=y, X=X, H=H, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)#
+    jags.params = c("beta", "delta","sigma")#
+    jags.inits = function(){    list(beta=c(1,1), delta=c(1, 1), sigma=1)   #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+qrfit = QRJM_jags(ald_data, tau=0.25)#
+print(qrfit)
+x = seq(-5,5,0.01)#
+y = dalaplace(x, 0, scale=1, kappa=0.25)
+plot(x, density(y))
+plot(density(y))
+lines(x, y)
+line(x, y)
+curve(x, y)
+plot(x, dalaplace(x, 0, scale=1, kappa=0.25))
+plot(x, dalaplace(x, 0, scale=1, kappa=0.25), type="l")
+x = seq(-10,10,0.01)
+plot(x, dalaplace(x, 0, scale=1, kappa=0.25), type="l")
+plot(x, dalaplace(x, 0, scale=1, kappa=0.5), type="l")
+plot(x, dalaplace(x, 0, scale=1, kappa=1), type="l")
+plot(x, dalaplace(x, 0, scale=1, kappa=2), type="l")
+plot(x, dalaplace(x, 0, scale=1, kappa=1), type="l")
+plot(x, dalaplace(x, 0, scale=5, kappa=1), type="l")
+plot(x, dalaplace(x, 0, scale=5, kappa=0.5), type="l")
+x = seq(-10,20,0.01)
+plot(x, dalaplace(x, 0, scale=5, kappa=0.5), type="l")
+plot(x, dalaplace(x, 0, scale=5, kappa=0.5), type="l")
+plot(x, dalaplace(x, 0, scale=5, kappa=1), type="l")
+x = seq(-20,20,0.01)
+plot(x, dalaplace(x, 0, scale=5, kappa=1), type="l")
+library(LaplacesDemon)
+lines(x, dalaplace(x), col='red')
+plot(x, dalaplace(x), col='red')
+x = seq(-20,20,0.01)
+plot(x, dalaplace(x), col='red', type="l")
+line(x, dalaplace(x, 0, scale=5, kappa=1), type="l")
+x = seq(-20,20,0.01)
+plot(x, dalaplace(x), col='red', type="l")
+lines(x, dalaplace(x, 0, scale=1, kappa=1), type="l")
+x = seq(-20,20,0.01)
+plot(x, dalaplace(x), col='red', type="l")
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+?ralaplace
+ald_density = function(x, p, mu, sigma){#
+    rho = (abs(x-mu) + (2*p -1)*(x-mu)) / (2*sigma)#
+    den = p*(1-p)/sigma*exp(-rho)#
+}
+plot(x, ald_density(x, p=0.5, mu=0, sigma=1))
+plot(x, ald_density(x, p=1, mu=0, sigma=1))
+plot(x, ald_density(x, p=1, mu=0, sigma=1), lty="l")
+plot(x, ald_density(x, p=0.75, mu=0, sigma=1), lty="l")
+plot(x, ald_density(x, p=0.75, mu=0, sigma=1), lty='l')
+plot(x, ald_density(x, p=0.75, mu=0, sigma=1), type='l')
+lines(x, dalaplace(x, 0, scale=1, kappa=0.75), lty=2)
+plot(x, ald_density(x, p=0.5, mu=0, sigma=1), type='l')
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+lines(x, dalaplace(x, 0, scale=1, kappa=0.5), lty=2)
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+plot(x, ald_density(x, p=0.5, mu=0, sigma=1), type='l')#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+lines(x, dlaplace(x, 0, scale=1), lty=2)
+plot(x, ald_density(x, p=0.5, mu=0, sigma=1), type='l')#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2, col="red")#
+lines(x, dlaplace(x, 0, scale=1), lty=3, col="blue")
+plot(x, dalaplace(x, 0, scale=1, kappa=1), lty=2, col="red")
+plot(x, dalaplace(x, 0, scale=1, kappa=1), lty=2, type="l", col="red")
+lines(x, dlaplace(x, 0, scale=1), lty=3, col="blue")
+x = seq(-20,20,0.01)#
+plot(x, dalaplace(x), col='red', type="l")#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+plot(x, dlaplace(x, 0, 1), col='red', type="l")#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)
+lines(x, ald_density(x, p=0.5, mu=0, sigma=1), col="blue")
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)#
+lines(x, ald_density(x, p=1, mu=0, sigma=1), col="blue")
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))#
+lines(x, dalaplace(x, 0, scale=1, kappa=1), lty=2)#
+lines(x, ald_density(x, p=0.75, mu=0, sigma=1), col="blue")
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))#
+lines(x, dalaplace(x, 0, scale=1, kappa=0.75), lty=2)#
+lines(x, ald_density(x, p=0.75, mu=0, sigma=1), col="blue")
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))#
+lines(x, dalaplace(x, 0, scale=1, kappa=0.5), lty=2)#
+lines(x, ald_density(x, p=0.75, mu=0, sigma=1), col="blue")
+plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))#
+lines(x, dalaplace(x, 0, scale=1, kappa=0.25), lty=2)#
+lines(x, ald_density(x, p=0.25, mu=0, sigma=1), col="blue")
+r_ald = function(n, sigma, p){#
+    u = rnorm(n)#
+    z = rexp(n)#
+    v = sigma*z#
+    theta = (1-2p)/(p*(1-p))#
+    tau = sqrt(2/(p*(1-p)))#
+    sample = theta * z + tau * sqrt(z) * u#
+#
+}
+r_ald = function(n, sigma, p){#
+    u = rnorm(n)#
+    z = rexp(n)#
+    v = sigma*z#
+    theta = (1-2*p)/(p*(1-p))#
+    tau = sqrt(2/(p*(1-p)))#
+    sample = theta * z + tau * sqrt(z) * u#
+}
+plot(density(r_ald(10000, sigma=1, p=0.25)))
+x = seq(-20,20,0.01)
+lines(x, ald_density(x, p=0.25, mu=0, sigma=1), col="blue")
+plot(density(r_ald(10000, sigma=1, p=0.25)))
+plot(density(r_ald(10000, sigma=1, p=0.25)), ylim=c(0.25))
+plot(density(r_ald(10000, sigma=1, p=0.25)), ylim=c(0,0.25))
+x = seq(-20,20,0.01)
+lines(x, ald_density(x, p=0.25, mu=0, sigma=1), col="blue")
+plot(density(r_ald(10000, sigma=1, p=0.25)), ylim=c(0,0.2))
+# plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))
+# lines(x, dalaplace(x, 0, scale=1, kappa=0.25), lty=2)
+x = seq(-20,20,0.01)
+lines(x, ald_density(x, p=0.25, mu=0, sigma=1), col="blue")
+plot(density(r_ald(10000, sigma=1, p=0.5)), ylim=c(0,0.2))
+plot(density(r_ald(10000, sigma=1, p=0.5)), ylim=c(0,0.25))
+# plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))
+# lines(x, dalaplace(x, 0, scale=1, kappa=0.25), lty=2)
+lines(x, ald_density(x, p=0.5, mu=0, sigma=1), col="blue")
+plot(density(r_ald(100000, sigma=1, p=0.5)), ylim=c(0,0.25))
+# plot(x, dlaplace(x, 0, 1), col='red', type="l", ylim=c(0,1))
+# lines(x, dalaplace(x, 0, scale=1, kappa=0.25), lty=2)
+x = seq(-20,20,0.01)
+lines(x, ald_density(x, p=0.5, mu=0, sigma=1), col="blue")
+?rnorm
+sim_longitudinal_data = function(n=250, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau, sigma=1, beta=c(1,1), delta=c(1,1)){#
+    # survival_data - data simulated from survival model#
+    # n - # of subjects#
+    # time - time points of observations#
+    # tau - quantile#
+    # sigma - scale parameter#
+    time = time # at most # = length(time) observations per patient#
+    y = matrix(NA, nrow=n, ncol=length(time)) # wide format#
+    # Ti = survival_data$Ti#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    H = matrix(rnorm(2*n), ncol=2)#
+    X = cbind(1, rnorm(n))#
+    count = sample.int(6, n, replace=TRUE) # number of observations after drop-outs#
+    # J = length(time)#
+#
+    for (i in 1:n){#
+        for (j in 1:count[i]){#
+            location = beta %*% X[i, ] + delta %*% c(H[i,1], H[i,2]*time[j]) + U[i, ] %*% c(1, time[j])#
+            y[i,j] = location + rald(1, location, scale=sigma, p=tau)       #
+        }   #
+    }#
+    list(y = y, X = X, H = H, J=count)      #
+}#
+#
+ald_data = sim_longitudinal_data(tau=0.25)
+dald = function(x, p, mu, sigma){#
+    rho = (abs(x-mu) + (2*p -1)*(x-mu)) / (2*sigma)#
+    den = p*(1-p)/sigma*exp(-rho)#
+}#
+#
+# random generation of ALD(0,sigma,p)#
+rald = function(n, sigma, p){#
+    u = rnorm(n)#
+    z = rexp(n)#
+    v = sigma*z#
+    theta = (1-2*p)/(p*(1-p))#
+    tau = sqrt(2/(p*(1-p)))#
+    sample = theta * z + tau * sqrt(z) * u#
+}
+ald_data = sim_longitudinal_data(tau=0.25)
+rald = function(n, scale, p){#
+    u = rnorm(n)#
+    z = rexp(n)#
+    v = scale*z#
+    theta = (1-2*p)/(p*(1-p))#
+    tau = sqrt(2/(p*(1-p)))#
+    sample = theta * z + tau * sqrt(z) * u#
+}
+ald_data = sim_longitudinal_data(tau=0.25)
+rald = function(n, location=0, scale, p){#
+    u = rnorm(n)#
+    z = rexp(n)#
+    v = scale*z#
+    theta = (1-2*p)/(p*(1-p))#
+    tau = sqrt(2/(p*(1-p)))#
+    sample = theta * z + tau * sqrt(z) * u#
+}
+sim_longitudinal_data = function(n=250, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau, sigma=1, beta=c(1,1), delta=c(1,1)){#
+    # survival_data - data simulated from survival model#
+    # n - # of subjects#
+    # time - time points of observations#
+    # tau - quantile#
+    # sigma - scale parameter#
+    time = time # at most # = length(time) observations per patient#
+    y = matrix(NA, nrow=n, ncol=length(time)) # wide format#
+    # Ti = survival_data$Ti#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    H = matrix(rnorm(2*n), ncol=2)#
+    X = cbind(1, rnorm(n))#
+    count = sample.int(6, n, replace=TRUE) # number of observations after drop-outs#
+    # J = length(time)#
+#
+    for (i in 1:n){#
+        for (j in 1:count[i]){#
+            location = beta %*% X[i, ] + delta %*% c(H[i,1], H[i,2]*time[j]) + U[i, ] %*% c(1, time[j])#
+            y[i,j] = location + rald(1, scale=sigma, p=tau)     #
+        }   #
+    }#
+    list(y = y, X = X, H = H, J=count)      #
+}
+ald_data = sim_longitudinal_data(tau=0.25)
+str(ald_data)
+head(ald_data$y)
+library(R2jags)#
+#
+QRJM_jags = function(data,tau,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_QR.txt"#
+    # file.show(model)#
+    # load longitudinal data#
+    y = data[['y']]#
+    X = data[['X']]#
+    H = data[['H']]#
+    J = data[['J']]#
+    jags.data = list(y=y, X=X, H=H, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)#
+    jags.params = c("beta", "delta","sigma")#
+    jags.inits = function(){    list(beta=c(1,1), delta=c(1, 1), sigma=1)   #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+qrfit = QRJM_jags(ald_data, tau=0.25)#
+print(qrfit)
+QRJM_jags = function(data,tau,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_QR.txt"#
+    # file.show(model)#
+    # load longitudinal data#
+    y = data[['y']]#
+    X = data[['X']]#
+    H = data[['H']]#
+    J = data[['J']]#
+    jags.data = list(y=y, X=X, H=H, qt=tau, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I, J=J)#
+    jags.params = c("beta", "delta","sigma")#
+    jags.inits = function(){    list(beta=c(0.1,.1), delta=c(.1, .1), sigma=.1) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+#
+qrfit = QRJM_jags(ald_data, tau=0.25)#
+print(qrfit)
+ald_data = sim_longitudinal_data(tau=0.25)
+qrfit = QRJM_jags(ald_data, tau=0.25)#
+print(qrfit)
+sur_data = sim_Ti(n=250, alpha=c(0,0))
+m(list=ls())#
+#########################################################################
+---------------------------- 1. simulate data --------------------------#
+#########################################################################
+################################################################
+############ function to simulate survival time ################
+################################################################
+# survival function is given by: S(t)= exp(- exp(B) * (exp(A*t) - 1) ) / A)#
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*2 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=250, alpha=c(0,0))
+str(sur_data)
+table(sur_data$event)
+83/250
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=250, alpha=c(0,0))
+table(sur_data$event)
+41/250
+library(R2jags)
+surfit = QRJM_jags(sur_data)#
+print(surfit)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[[1]][['event']]#
+#
+    jags.data = list(H=H, W=W, Ti=Ti, event=event, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I)#
+    jags.params = c("gamma","rho", "sig")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sigma=0.1, sig=0.1, rho=0.1)    #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(H=H, W=W, Ti=Ti, event=event, t=c(0, 1/4, 1/2, 3/4, 1, 3), I=I)#
+    jags.params = c("gamma","rho", "sig")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sigma=0.1, sig=0.1, rho=0.1)    #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+sur_data = sim_Ti(n=250, alpha=c(0,0))
+str(sur_Data)
+str(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma","rho", "sig")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sigma=0.1, sig=0.1, rho=0.1)    #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma","rho", "sig")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sigma=0.1, sig=0.1, rho=0.1)    #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)#
+print(surfit)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma","rho", "sig1")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sig1=0.1, rho=0.1)  #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)
+str(sur_data)
+head(sur_data$Ti, 20)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    # H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma","rho", "sig1")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1), sig1=0.1, rho=0.1)  #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)#
+print(surfit)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    # H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1)) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)#
+print(surfit)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    # H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1)) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    # H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1)) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+surfit = QRJM_jags(sur_data)#
+print(surfit)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    # H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){    list(gamma=c(0.1, 0.1)) #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+rm(list=ls())#
+#########################################################################
+---------------------------- 1. simulate data --------------------------#
+#########################################################################
+################################################################
+############ function to simulate survival time ################
+################################################################
+# survival function is given by: S(t)= exp(- exp(B) * (exp(A*t) - 1) ) / A)#
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}#
+#
+sur_data = sim_Ti(n=250, alpha=c(0,0))
+library(R2jags)#
+#
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){ list(gamma=c(0.1, 0.1))}   #
+    jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)  #
+}
+surfit = QRJM_jags(sur_data)
+edit(jags)
+surfit = QRJM_jags(sur_data)
+ls()
+str(sur_data)
+sur_data$Ti
+sur_data$event
+sur_data$W
+QRJM_jags = function(data, I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival00.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("gamma")#
+    jags.inits = function(){ list(gamma=c(0.1, 0.1))}   #
+    jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)  #
+}
+surfit = QRJM_jags(sur_data)
+sur_data = sim_Ti(n=250, alpha=c(0,1))
+sur_data$event
+sur_data$Ti
+sur_data = sim_Ti(n=300, alpha=c(0,1))
+RJM_jags = function(data, I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival01.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    W = data[['W']]#
+    H = data[['H']]#
+    event =  data[['event']]#
+#
+    jags.data = list(W=W, H=H, Ti=Ti, event=event, I=I)#
+    jags.params = c("delta","gamma", "sig1", "rho")#
+    jags.inits = function(){ list(delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sig1=0.1, rho=0.1)} #
+    jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)  #
+}
+surfit = QRJM_jags(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival01.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(H=H, W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("delta","gamma","alpha1","alpha2", "sig1", "rho")#
+    jags.inits = function(){    list(delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sig1=0.1, alpha1=0.1, alpha2=0.1, rho=0.1)   #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival01.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(H=H, W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("delta","gamma","alpha1", "alpha2", "sig1", "rho")#
+    jags.inits = function(){    list(delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sig1=0.1, alpha1=0.1, alpha2=0.1, rho=0.1)   #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}
+surfit = QRJM_jags(sur_data)
+surfit = QRJM_jags(sur_data)
+load.module("dic")
+surfit = QRJM_jags(sur_data)
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}#
+#
+sur_data = sim_Ti(n=300, alpha=c(1,0))
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}#
+#
+sur_data = sim_Ti(n=300, alpha=c(0,0))
+QRJM_jags = function(data,I=250){#
+    setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files")#
+    model = "/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/model\ files/QRJM_survival01.txt"#
+    # load survival data#
+    Ti = data[['Ti']]#
+    H = data[['H']]#
+    W = data[['W']]#
+    event =  data[['event']]#
+#
+    jags.data = list(H=H, W=W, Ti=Ti, event=event, I=I)#
+    jags.params = c("delta","gamma","alpha1", "alpha2", "sig1", "rho")#
+    jags.inits = function(){    list(delta=c(0.1, 0.1), gamma=c(0.1, 0.1), sig1=0.1, alpha1=0.1, alpha2=0.1, rho=0.1)   #
+    }   #
+  jags(data=jags.data, inits=jags.inits, jags.params, n.iter=15000, n.burnin=5000, model.file=model)    #
+}#
+#
+surfit = QRJM_jags(sur_data)
+library(survival)
+?survival
+?coxph
+phfit = coxph(Surv(Ti, event) ~ W, sur_data)
+summary(phfit)
+coxfit = coxph(Sur(Ti, event) ~ W, data=sur_data)#
+summary(coxfit)
+library(survival)
+coxfit = coxph(Sur(Ti, event) ~ W, data=sur_data)
+summary(coxfit)
+coxfit = coxph(Surv(Ti, event) ~ W, data=sur_data)
+summary(coxfit)
+sur_data = sim_Ti(n=300, alpha=c(1,0))
+coxfit = coxph(Surv(Ti, event) ~ W + H, data=sur_data)
+summary(coxfit)
+sim_Ti = function(n=500, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = delta[1] * H[,1] #
+        # print(length(B))#
+        A = delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=300)
+sim_Ti = function(n=500, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    # if (alpha[1]==0 & alpha[2]==0){#
+    #   Time = - log(S) / exp(gamma %*% t(W))#
+    # }#
+    else{#
+        B = delta[1] * H[,1] #
+        # print(length(B))#
+        A = delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}#
+#
+sur_data = sim_Ti(n=300)
+sim_Ti = function(n=500, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    # if (alpha[1]==0 & alpha[2]==0){#
+    #   Time = - log(S) / exp(gamma %*% t(W))#
+    # }#
+    # else{#
+        B = delta[1] * H[,1] #
+        # print(length(B))#
+        A = delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    # }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=300)
+coxfit = coxph(Surv(Ti, event) ~ H, data=sur_data)
+summary(coxfit)
+sur_data = sim_Ti(n=300, alpha=c(1,0))
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=300, alpha=c(1,0))
+coxfit = coxph(Surv(Ti, event) ~ H, data=sur_data)
+summary(coxfit)
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    print(sum(is.na(Time)))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}
+sur_data = sim_Ti(n=300, alpha=c(1,0))
+sur_data = sim_Ti(alpha=c(1,0))
+coxfit = coxph(Surv(Ti, event) ~ H, data=sur_data)
+summary(coxfit)
+sim_Ti = function(n=500, alpha, delta=c(1,1), gamma=c(1,1)){#
+    Time = numeric(n)#
+    S = runif(n) # survival probability#
+    H = matrix(rnorm(2*n), ncol=2)#
+    W = matrix(rnorm(2*n), ncol=2)#
+    # random effects#
+    U = mvrnorm(n, mu=c(0,0), Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T))#
+    attributes(U)[[2]]=NULL # remove 'dimnames' attribute#
+    if (alpha[1]==0 & alpha[2]==0){#
+        Time = - log(S) / exp(gamma %*% t(W))#
+    }#
+    else{#
+        B = alpha[1] * delta[1] * H[,1] + alpha[2] * U[,1] + gamma %*% t(W)#
+        # print(length(B))#
+        A = alpha[2] * U[,2] + alpha[1] * delta[2] * H[,2]#
+        # print(length(A))#
+        Time = log(1-log(S)*A/exp(B))/A #
+    }#
+#
+    Ti_id = which(!is.na(Time))#
+    print(sum(is.na(Time)))#
+    Time = Time[Ti_id][1:250] # take the first 250 that are not NA#
+    Ci = rbeta(250, 4, 1)*5 # censoring time#
+    Ti = pmin(Time, Ci)#
+    event = as.numeric(Time == Ti) # 1 for event, 0 for censor#
+    U = U[Ti_id, ][1:250, ]#
+    H = H[Ti_id, ][1:250, ]#
+    W = W[Ti_id, ][1:250, ]#
+    list(Ti=Ti, event=event, H=H, U=U, W=W) #
+}#
+#
+sur_data = sim_Ti(alpha=c(1,0))
+coxfit = coxph(Surv(Ti, event) ~ W + H, data=sur_data)
+summary(coxfit)
+sur_data = sim_Ti(alpha=c(0,0))
+coxfit = coxph(Surv(Ti, event) ~ W, data=sur_data)
+summary(coxfit)
+u=rmvnorm(n,c(0,0),Sigma)#
+X=matrix(1,n,2)#
+X[,2]=rnorm(n)#
+## Z=c(1,t) #
+H=matrix(rnorm(2*n),n,2)#
+W=matrix(rnorm(2*n),n,2)#
+alpha1=1#
+alpha2=1
+library(MASS)
+u=rmvnorm(n,c(0,0),Sigma)
+library(mvtnorm)
+Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T)
+u=rmvnorm(n,c(0,0),Sigma)
+N=250
+n=250
+Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T)
+u=rmvnorm(n,c(0,0),Sigma)
+X=matrix(1,n,2)
+X[,2]=rnorm(n)
+## Z=c(1,t)
+H=matrix(rnorm(2*n),n,2)
+W=matrix(rnorm(2*n),n,2)
+alpha1=1
+alpha2=1
+surv=function(t) {#
+res=((exp(alpha2*u[,1]+alpha2*t*u[,2]+alpha1*delta[1]*H[,1]+alpha1*delta[2]*H[,2]*t+W%*%gamma)-exp(alpha1*H[,1]*delta[1]+W%*%gamma+alpha2*u[,1]))/(alpha2*u[,2]+alpha1*H[,2]*delta[2]))#
+if(alpha1==0 & alpha2==0) {res=t*exp(W%*%gamma)}#
+exp(-res)}
+rnd=runif(n)
+Ti=rep(Inf,n)
+w=which(1-surv(101)-rnd>0)
+delta = gamma = c(1,1)
+w=which(1-surv(101)-rnd>0)
+surv(101)
+w
+Ti[w]=sapply(w,function(j) uniroot(function(x) 1-surv(x)[j]-rnd[j],lower=0,upper=101)$root)
+Ti[Ti==0]=min(Ti[Ti>0])/2
+Ci=5*rbeta(n,4,1)
+Delta=rep(1,n)
+Delta[Ti>Ci]=0
+Ti[Ti>Ci]=Ci[Ti>Ci]
+Ti
+rnd=runif(n)
+Ti=rep(Inf,n)
+w=which(1-surv(101)-rnd>0)
+Ti[w]=sapply(w,function(j) uniroot(function(x) 1-surv(x)[j]-rnd[j],lower=0,upper=101)$root)
+Ti
+Ti[Ti==0]=min(Ti[Ti>0])/2
+Ti
+Ci=5*rbeta(n,4,1)
+Delta=rep(1,n)
+Delta[Ti>Ci]=0
+Delta

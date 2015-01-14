@@ -1,0 +1,820 @@
+round(table(oneattempt)/47, 3)*100
+bothOA = tapply(sub_noninv$Both.Segments.Found., sub_noninv$ID., `[`, 1)
+completed = tapply(sub_noninv$TCD.Measurement.attempted, sub_noninv$ID., `[`, 1)
+oth = numeric(47)#
+for (i in 1:47){#
+    if (bothOA[i]==3 & completed[i]==3) both[i] = TRUE#
+    else both[i]=FALSE#
+}
+xtable(table(bothOA))
+table(bothOA)
+round(table(oneattempt)/47, 3)*100
+rm(list=ls())#
+#
+## load data#
+inv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/Invasive\ ICP\ template\ Final.csv", header=TRUE)#
+#
+noninv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/non-invasive_110614update.csv", header=TRUE)
+unique(inv$Study.ID) == unique(noninv$ID.)
+unique(inv$Study.ID)
+unique(noninv$ID.)
+noninv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/non-invasive_110614update.csv", header=TRUE)
+unique(noninv$ID.)
+noninv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/non-invasive_110614update.csv", header=TRUE)
+unique(inv$Study.ID) == unique(noninv$ID.)
+HT = tapply(noninv$HT..INCH., noninv$ID., `[`, 1)
+summary(HT)
+new_id = subset(noninv, ENROLLED=='Yes')$ID.
+sub_noninv = subset(noninv, ID.%in%new_id)
+oneattempt = tapply(sub_noninv$Attempted.to.find.segments., sub_noninv$ID., `[`, 1)
+round(table(oneattempt)/47, 3)*100
+bothOA = tapply(sub_noninv$Both.Segments.Found., sub_noninv$ID., `[`, 1)
+xtable(table(bothOA))
+completed = tapply(sub_noninv$TCD.Measurement.attempted, sub_noninv$ID., `[`, 1)
+both = numeric(47)
+for (i in 1:47){#
+    if (bothOA[i]==3 & completed[i]==3) both[i] = TRUE#
+    else both[i]=FALSE#
+}#
+#
+xtable(table(both))
+reliable = tapply(sub_noninv$ICP.2D.RELIABLE., sub_noninv$ID., function(x) 'Yes'%in% x)#
+andreliable = numeric(47)#
+for (i in 1:47){#
+    if (both[i] == 1 & reliable[i] == 'TRUE') andreliable[i] = TRUE#
+    else andreliable[i] = FALSE #
+}#
+xtable(table(andreliable))
+sub_noninv2 = subset(sub_noninv, ICP.2D.RELIABLE.=='Yes' & MEASURE.TYPE %in%c('During', 'DURING LP', 'During LP', 'DURING'))#
+sum(unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.))#
+# [1] 21#
+#
+ind = unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.)#
+ids = unique(sub_noninv$ID.)[as.logical(andreliable)][ind]
+ICP = subset(noninv, !(ICP.2D......mmHg. %in% c('NR', '')))[26]#
+ICP = factor(ICP[[1]])#
+ICP = as.numeric(levels(ICP)[ICP]) # to covert the factor to numeric#
+summary(ICP)
+head(noninv[c(14:17)])#
+#
+des_IOP = function(col){#
+    IOP = noninv[col][[1]]#
+    # print(IOP)#
+    f_IOP = as.numeric(levels(IOP)[IOP])#
+    # print(IOP)#
+    m = mean(f_IOP, na.rm=TRUE)#
+    r = range(f_IOP, na.rm=TRUE)#
+    list(mean=m, range=r)#
+}#
+#
+lapply(c(14:17), des_IOP)
+get_IOP = function(col){#
+    IOP = noninv[col][[1]]#
+    ID = noninv$ID#
+    f_IOP = as.numeric(levels(IOP)[IOP])#
+    name = names(noninv)[col]#
+    order = strsplit(name, '.', fixed=TRUE)[[1]][2]#
+    side = strsplit(name, '.', fixed=TRUE)[[1]][3]#
+    df = data.frame(ID, f_IOP, side, order)#
+    subset(df, !is.na(f_IOP))#
+}#
+#
+df1 = get_IOP(14)#
+df2 = get_IOP(15)#
+df3 = get_IOP(16)#
+df4 = get_IOP(17)
+F = rbind(df1, df2, df3, df4)
+library(lmerTest)#
+fit = lmer(f_IOP ~ si
+de + order + (1| ID), data=DF)#
+xtable(summary(fit))
+ind = unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.)#
+ids = unique(sub_noninv$ID.)[as.logical(andreliable)][ind]#
+#
+## get noninvasive ICP for those ids, only reliable measures#
+noninv_ICP = subset(noninv, ID.%in%ids & ICP.2D.RELIABLE. == 'Yes' & !(MEASURE.TYPE%in%c('PRE LP', 'Pre LP', 'PreLP')), select=c('ID.','ICP.2D......mmHg.'))#
+names(noninv_ICP)= c('ID', 'ICP')
+inv_ICP = subset(inv, Study.ID%in%ids, select=c('Study.ID','ICPLP_mmHg'))#
+cum_count = cumsum(as.vector(table(inv_ICP$Study.ID)))#
+inv_ICP = inv_ICP[cum_count,]#
+names(inv_ICP)= c('ID', 'ICP')
+paired = rbind(noninv_ICP, inv_ICP)#
+rownames(paired)=NULL#
+paired$type = rep(c('LP ICP', 'Vittamed ICP'), each=21)#
+paired$item = rep(c(1:21), 2)#
+paired$repl = rep(1,42)
+ICP1 = paired$ICP[paired$type=="LP ICP"]#
+ICP2 = paired$ICP[paired$type=="Vittamed ICP"]#
+ICP1 = as.numeric(levels(ICP1)[ICP1])#
+ICP2 = as.numeric(levels(ICP2)[ICP2])
+cor(ICP1, ICP2,method="pearson")#
+# [1] 0.4651086#
+cor(ICP1, ICP2,method="spearman")
+paired$ICP = c(ICP1, ICP2)
+par(mar=c(5,4,2,5))#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)
+dim(paired)
+paired
+par(mar=c(5,4,2,5))#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)
+par(mar=c(5,4,2,5))
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5,col='blue')
+par(mar=c(5,4,2,5))
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5,col='blue')
+?BA.plot
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5,col.points='blue')
+par(mar=c(5,4,2,5))#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)#
+par(new=TRUE)#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3,col.points='blue')
+par(mar=c(5,4,2,5))#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)#
+par(new=TRUE)#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.1,col.points='blue')
+par(mar=c(5,4,2,5))#
+# BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)#
+# par(new=TRUE)#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.1,col.points='blue')
+par(mar=c(5,4,2,5))#
+# BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5)#
+# par(new=TRUE)#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.01,col.points='blue')
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.01,col.points='blue', pch.points=20)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.01,col.points='blue', pch.points=12)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.01,col.points='blue', pch.points=1)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=1,col.points='blue', pch.points=1)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5,col.points='blue', pch.points=1)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=1)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=3)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=4)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=5)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=6)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=7)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=8)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=9)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=10)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.2,col.points='blue', pch.points=1)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5, pch.points=2)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5, pch.points=3)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.5, pch.points=4)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=4)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=5)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=6)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=7)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=8)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=9)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=10)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=11)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=12)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=13)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=14)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=15)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=16)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=17)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=2)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=3)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=4)
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=1)
+par(mar=c(5,4,2,5))#
+BA.plot(Meth(paired[,-1],meth="type",y="ICP",repl="repl",item="item"),diflim=c(-20,20),cex.points=0.3, pch.points=1)
+source("/Users/askming/Dropbox/RA works/Self/10. New data/R code/description.R")
+paired
+m(list=ls())#
+#
+## load data#
+inv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/Invasive\ ICP\ template\ Final.csv", header=TRUE)#
+#
+noninv = read.csv("/Users/askming/Dropbox/RA\ works/Self/10.\ New\ data/non-invasive_110614update.csv", header=TRUE)#
+## clean data#
+# names(inv_icp)#
+#
+unique(inv$Study.ID) == unique(noninv$ID.)#
+# all TRUE, two datasets consist of same patients#
+#
+#### number of patients #####
+length(unique(noninv$ID.))#
+# [1] 52#
+#
+#### age range #####
+Age = tapply(noninv$AGE, noninv$ID., `[`, 1)#
+range(Age)#
+#
+#### sex #####
+tapply(noninv$GENDER, noninv$ID., identity)#
+Sex = tapply(noninv$GENDER, noninv$ID., `[`, 1)#
+xtable(table(Sex))#
+# 2  3 #
+# 40 11 #
+# one is NA. 2 == Femal, 3 == Male#
+#
+#### race #####
+RACE = tapply(noninv$RACE, noninv$ID., `[`, 1)#
+xtable(table(RACE))#
+# 2  3  4  5  6 #
+# 15  1 14  2 20 #
+# AA == 2, Asian == 3, Hispanic == 4, Other == 5, White == 6, #
+#
+#### WT #####
+WT = tapply(noninv$WT..KG., noninv$ID., `[`, 1)#
+summary(WT)#
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. #
+# 47.60   74.85   91.15   94.02  110.00  151.00 #
+#
+#### WT #####
+HT = tapply(noninv$HT..INCH., noninv$ID., `[`, 1)#
+summary(HT)#
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. #
+# 60.00   63.00   65.00   65.15   67.00   74.00#
+#
+#############################################################
+#### at least one attempt #####
+new_id = subset(noninv, ENROLLED=='Yes')$ID.#
+sub_noninv = subset(noninv, ID.%in%new_id)#
+#
+oneattempt = tapply(sub_noninv$Attempted.to.find.segments., sub_noninv$ID., `[`, 1)#
+round(table(oneattempt)/47, 3)*100#
+#  3 #
+# 100 #
+# 2 == No, 3 == Yes#
+#
+#### both OA found #####
+# tapply(noninv$Both.Segments.Found., noninv$ID., identity)#
+bothOA = tapply(sub_noninv$Both.Segments.Found., sub_noninv$ID., `[`, 1)#
+xtable(table(bothOA))#
+# 2  3 #
+# 9 38#
+# 2 == No, 3 == Yes #
+#
+#### both OA found && completed measure #####
+# tapply(sub_noninv$TCD.Measurement.attempted, sub_noninv$ID., identity)#
+#
+completed = tapply(sub_noninv$TCD.Measurement.attempted, sub_noninv$ID., `[`, 1)#
+# 2 == No, 3 == Yes #
+both = numeric(47)#
+for (i in 1:47){#
+    if (bothOA[i]==3 & completed[i]==3) both[i] = TRUE#
+    else both[i]=FALSE#
+}#
+#
+xtable(table(both))#
+ # 0  1 #
+# 10 37#
+#
+#### both OA found && completed measure && reliable #####
+reliable = tapply(sub_noninv$ICP.2D.RELIABLE., sub_noninv$ID., function(x) 'Yes'%in% x)#
+andreliable = numeric(47)#
+for (i in 1:47){#
+    if (both[i] == 1 & reliable[i] == 'TRUE') andreliable[i] = TRUE#
+    else andreliable[i] = FALSE #
+}#
+xtable(table(andreliable))#
+# 0  1 #
+# 20 27 #
+#
+#### both OA found && completed measure && reliable during LP #####
+sub_noninv2 = subset(sub_noninv, ICP.2D.RELIABLE.=='Yes' & MEASURE.TYPE %in%c('During', 'DURING LP', 'During LP', 'DURING'))#
+sum(unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.))#
+# [1] 21#
+#
+ind = unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.)#
+ids = unique(sub_noninv$ID.)[as.logical(andreliable)][ind]#
+####### ICP ########
+ICP = subset(noninv, !(ICP.2D......mmHg. %in% c('NR', '')))[26]#
+ICP = factor(ICP[[1]])#
+ICP = as.numeric(levels(ICP)[ICP]) # to covert the factor to numeric#
+summary(ICP)#
+# the following is for IOP measures#
+head(noninv[c(14:17)])#
+#
+des_IOP = function(col){#
+    IOP = noninv[col][[1]]#
+    # print(IOP)#
+    f_IOP = as.numeric(levels(IOP)[IOP])#
+    # print(IOP)#
+    m = mean(f_IOP, na.rm=TRUE)#
+    r = range(f_IOP, na.rm=TRUE)#
+    list(mean=m, range=r)#
+}#
+#
+lapply(c(14:17), des_IOP)#
+get_IOP = function(col){#
+    IOP = noninv[col][[1]]#
+    ID = noninv$ID#
+    f_IOP = as.numeric(levels(IOP)[IOP])#
+    name = names(noninv)[col]#
+    order = strsplit(name, '.', fixed=TRUE)[[1]][2]#
+    side = strsplit(name, '.', fixed=TRUE)[[1]][3]#
+    df = data.frame(ID, f_IOP, side, order)#
+    subset(df, !is.na(f_IOP))#
+}#
+#
+df1 = get_IOP(14)#
+df2 = get_IOP(15)#
+df3 = get_IOP(16)#
+df4 = get_IOP(17)#
+DF = rbind(df1, df2, df3, df4)#
+#
+library(lmerTest)#
+fit = lmer(f_IOP ~ side + order + (1| ID), data=DF)#
+xtable(summary(fit))#
+#
+# library(ggplot2)#
+# qplot(f_IOP, data=DF, facets=side~order, binwidth=0.5, geom=c('density'))#
+#######################################################
+############ following is for reliability #############
+#######################################################
+# thoes ids that used to do the reliability test#
+ind = unique(sub_noninv$ID.)[as.logical(andreliable)] %in% unique(sub_noninv2$ID.)#
+ids = unique(sub_noninv$ID.)[as.logical(andreliable)][ind]#
+#
+## get noninvasive ICP for those ids, only reliable measures#
+noninv_ICP = subset(noninv, ID.%in%ids & ICP.2D.RELIABLE. == 'Yes' & !(MEASURE.TYPE%in%c('PRE LP', 'Pre LP', 'PreLP')), select=c('ID.','ICP.2D......mmHg.'))#
+names(noninv_ICP)= c('ID', 'ICP')#
+#
+## get invasive ICP for those ids#
+inv_ICP = subset(inv, Study.ID%in%ids, select=c('Study.ID','ICPLP_mmHg'))#
+cum_count = cumsum(as.vector(table(inv_ICP$Study.ID)))#
+inv_ICP = inv_ICP[cum_count,]#
+names(inv_ICP)= c('ID', 'ICP')#
+#
+## merge above two data #
+paired = rbind(noninv_ICP, inv_ICP)#
+rownames(paired)=NULL#
+paired$type = rep(c('LP ICP', 'Vittamed ICP'), each=21)#
+paired$item = rep(c(1:21), 2)#
+paired$repl = rep(1,42)#
+#
+ICP1 = paired$ICP[paired$type=="LP ICP"]#
+ICP2 = paired$ICP[paired$type=="Vittamed ICP"]#
+ICP1 = as.numeric(levels(ICP1)[ICP1])#
+ICP2 = as.numeric(levels(ICP2)[ICP2])#
+#
+### calculate correlation#
+cor(ICP1, ICP2,method="pearson")#
+# [1] 0.4651086#
+cor(ICP1, ICP2,method="spearman")#
+# [1] 0.4632879#
+#
+#plot BA plot#
+#setwd("/Users/askming/Dropbox/RA Works/Self/1. Eric\ Bershad")#
+paired$ICP = c(ICP1, ICP2)
+paired
+summary(paired[paired$type='LP ICP'])
+summary(paired$ICP[paired$type=='LP ICP',])
+summary(paired[paired$type=='LP ICP',]$ICP)
+summary(ICP)
+names(inv)
+summary(inv$ICPLP_mmHg)
+str(inv$ICPLP_mmHg)
+levels(inv$ICPLP_mmHg)
+inv_ICP = subset(inv, !(ICPLP_mmHg %in% c('#DIV/0!', '')))[20]#
+inv_ICP = factor(inv_ICP[[1]])
+inv_ICP
+inv_ICP = as.numeric(levels(inv_ICP)[inv_ICP])
+inv_ICP
+summary(inv_ICP)
+Ti_sim(alpha1=1, alpha2=1)
+W = matrix(rnorm(2*n),n,2)
+gamma=c(1,1)
+delta = gamma = c(1,1)
+sur_data = Ti_sim(alpha1=0, alpha2=0)
+rald = function(n, location=0, scale, p){#
+		u = rnorm(n)#
+		z = rexp(n)#
+		v = scale*z#
+		theta = (1-2*p)/(p*(1-p))#
+		tau = sqrt(2/(p*(1-p)))#
+		sample = theta * z + tau * sqrt(z) * u#
+	}
+rald(1)
+rald(1, scale=1, p=0.25)
+rald = function(n, location=0, scale, p){#
+		u = rnorm(n)#
+		z = rexp(n)#
+		v = scale*z#
+		theta = (1-2*p)/(p*(1-p))#
+		tau = sqrt(2/(p*(1-p)))#
+		sample = theta * z + tau * sqrt(z) * u#
+		sample#
+	}
+rald(1, scale=1, p=0.25)
+plot(density(rald(10000, sigma=1, p=0.5)), ylim=c(0,0.25))
+plot(density(rald(10000, scale=1, p=0.5)), ylim=c(0,0.25))
+dald = function(x, p, mu, sigma){#
+	rho = (abs(x-mu) + (2*p -1)*(x-mu)) / (2*sigma)#
+	den = p*(1-p)/sigma*exp(-rho)#
+}
+x = seq(-20,20,0.01)
+lines(x, dald(x, p=0.5, mu=0, sigma=1), col="blue")
+dald(x, p=0.5, mu=0, sigma=1)
+dald = function(x, p, mu, sigma){#
+	rho = (abs(x-mu) + (2*p -1)*(x-mu)) / (2*sigma)#
+	den = p*(1-p)/sigma*exp(-rho)#
+	den#
+}
+dald(x, p=0.5, mu=0, sigma=1)
+rnorm
+edit(rnorm)
+pro3 = function(num){#
+    # define a function that check if a number is primer#
+    # is.prime <- function(n) n == 2L || n == 3L || all(n %% 3L:floor(sqrt(n)) != 0)#
+    candidate = seq(2, floor(sqrt(n)))#
+    candidate[num%%candidate == 0]#
+}
+pro5 = function(){#
+    is.prime <- function(n) n == 2L || n == 3L || all(n %% 3L:floor(sqrt(n)) != 0)#
+    seq = seq(1,20)#
+    # 2, 3, 5, 7, 11, 13, 17, 19#
+    temp = 3*7*11*13*17*19#
+    temp*2*4*5*3*2  #
+}#
+#
+pro5()
+library(INLA)
+?INLA
+update.packages()
+n = 10
+y = c(1:n, 1:n, 2*(1:n))
+x = c(1:n, rep(NA, 2*n))
+xx = c(rep(NA,n), 1:n, rep(NA, n))
+xxx = c(rep(NA, 2*n), 1:n)
+www = c(rep(NA,2*n),rep(2,n))
+formula = y ~ f(x) + f(xx, copy="x", fixed=FALSE) + f(xxx, www,
+copy="x", same.as = "xx")
+r = inla(formula, data = data.frame(y,x,xx,xxx),verbose=TRUE,
+control.predictor =list(compute=TRUE),
+control.family = list(initial=4,fixed=T))
+r
+summary(r)
+n=1000#
+i=1:n#
+j = i#
+z = rnorm(n)#
+w = runif(n)#
+y = z  + 2*z*w + rnorm(n)#
+formula = y ~ f(i, model="iid",initial=0, fixed=T) +#
+              f(j, w, copy="i", fixed=FALSE)#
+r = inla(formula, data = data.frame(i,j,w,y))
+summary(r)
+data.frame(i,j,w,y)
+summary(r)
+n = 100#
+N = 2*n#
+y = numeric(N)#
+x = rnorm(N)#
+#
+y[1:n] = 1 + x[1:n] + rnorm(n, sd = 1/sqrt(1))#
+y[1:n + n] = 1 + x[1:n + n] + rnorm(n, sd = 1/sqrt(2))#
+#
+Y = matrix(NA, N, 2)#
+Y[1:n, 1] = y[1:n]#
+Y[1:n + n, 2] = y[1:n + n]
+Y
+formula = Y ~ x + 1#
+result = inla(#
+        formula,#
+        data = data.frame(Y, x),#
+        family = c("gaussian", "gaussian"),#
+        control.family = list(list(prior = "flat", param = numeric()),#
+                            list()))
+summary(result)
+formula = Y ~ x + 1#
+result = inla(#
+        formula,#
+        data = data.frame(Y, x),#
+        family = c("gaussian", "gaussian"),#
+        control.family = list(list(prior = "flat", param = numeric()),#
+                            list()))
+summary(result)
+n = 100#
+N = 2*n#
+y = numeric(N)#
+x = rnorm(N)#
+#
+y[1:n] = 1 + x[1:n] + rnorm(n, sd = 1/sqrt(1))#
+y[1:n + n] = 1 + x[1:n + n] + rnorm(n, sd = 1/sqrt(2))#
+#
+Y = matrix(NA, N, 2)#
+Y[1:n, 1] = y[1:n]#
+Y[1:n + n, 2] = y[1:n + n]#
+#
+formula = Y ~ x + 1#
+result = inla(#
+        formula,#
+        data = data.frame(Y, x),#
+        family = c("gaussian", "gaussian"),#
+        control.family = list(list(prior = "flat", param = numeric()),#
+                            list()))#
+summary(result)
+?inla
+names(inla.models()$likelihood)
+?control.family
+n = 100#
+N = 2*n#
+y = numeric(N)#
+x = rnorm(N)#
+#
+y[1:n] = 1 + x[1:n] + rnorm(n, sd = 1/sqrt(1))#
+y[1:n + n] = 1 + x[1:n + n] + rnorm(n, sd = 1/sqrt(2))#
+#
+Y = matrix(NA, N, 2)#
+Y[1:n, 1] = y[1:n]#
+Y[1:n + n, 2] = y[1:n + n]#
+#
+formula = Y ~ x + 1#
+result = inla(#
+        formula,#
+        data = data.frame(Y, x),#
+        family = c("gaussian", "gaussian"),#
+        control.family = list(list(prior = "flat", param = numeric()),#
+                            list(prior = "flat", param = numeric())))#
+summary(result)
+n = 10#
+N = 2*n#
+#
+## common covariates#
+x = rnorm(n)#
+#
+## Poisson, depends on x#
+E1 = runif(n)#
+y1 = rpois(n, lambda = E1*exp(x))#
+#
+## Binomial, depends on x#
+size = sample(1:10, size=n, replace=TRUE)#
+prob = exp(x)/(1+exp(x))#
+y2 = rbinom(n, size= size, prob = prob)#
+#
+## Join them together#
+Y = matrix(NA, N, 2)#
+Y[1:n, 1] = y1#
+Y[1:n + n, 2] = y2#
+#
+## The E for the Poisson#
+E = numeric(N)#
+E[1:n] = E1#
+E[1:n + n] = NA#
+#
+## Ntrials for the Binomial#
+Ntrials = numeric(N)#
+Ntrials[1:n] = NA#
+Ntrials[1:n + n] = size#
+#
+## Duplicate the covariate which is shared#
+X = numeric(N)#
+X[1:n] = x#
+X[1:n + n] = x#
+#
+## Formula involving Y as a matrix#
+formula = Y ~ X - 1#
+#
+## `family' is now #
+result = inla(formula,#
+        family = c("poisson", "binomial"),#
+        data = data.frame(Y, X),#
+        E = E, Ntrials = Ntrials)
+summary(result)
+library(rjags)
+library(R2jags)
+?install.packages
+install.packages("/Users/askming/Downloads/R2jags_0.04-03.tar.gz", repos = NULL, type="source")
+remove.packages(R2jags)
+remove.packages('R2jags')
+remove.packages('rjags')
+install.packages("R2jags")
+library(R2jags)
+install.packages("/Users/askming/Downloads/rjags_3-12.tar.gz", repos = NULL, type="source")
+remove.packages("rjags")
+install.packages("/Users/askming/Downloads/rjags_3-12.tar.gz", repos = NULL, type="source")
+install.packages("R2jags")
+library(R2jags)
+library(mvtnorm)#
+Ti_sim = function(n=250, alpha1, alpha2, delta=c(1,1), gamma=c(1,1)){#
+    # random effects#
+    Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T)#
+    u=rmvnorm(n,c(0,0),Sigma)#
+    H = matrix(rnorm(2*n),n,2)#
+    W = matrix(rnorm(2*n),n,2)#
+#
+    # define the survival function#
+    surv = function(t) {#
+        if(alpha1==0 & alpha2==0) {res=t*exp(W%*%gamma)}#
+        else{#
+            res = ((exp(alpha2*u[,1]+alpha2*t*u[,2]+alpha1*delta[1]*H[,1]+alpha1*delta[2]*H[,2]*t+W%*%gamma)-exp(alpha1*H[,1]*delta[1]+W%*%gamma+alpha2*u[,1]))/(alpha2*u[,2]+alpha1*H[,2]*delta[2]))#
+        }#
+        return(exp(-res))#
+    }#
+#
+    rnd =runif(n) #
+    Ti = rep(Inf,n) #
+    # w = which(surv(1e8)-rnd < 0)#
+    w = which(1-surv(101)-rnd > 0)#
+    Ti[w] = sapply(w,function(j) uniroot(function(x) 1-surv(x)[j]-rnd[j],lower=0,upper=101)$root)#
+    Ti[Ti==0] = min(Ti[Ti>0])/2#
+    Ci = 5*rbeta(n,4,1)#
+    Delta = as.numeric(Ti < Ci)#
+    Ti2 = pmin(Ti, Ci)#
+#
+    list(Ti=Ti2, event=Delta, H=H, W=W)#
+}#
+#
+# Ti_sim2 = function(n=250, gamma=c(1,1), k=1){#
+#   W = matrix(rnorm(2*n), nrow=n)#
+#   time<-numeric(0)#
+#   event<-numeric(0)#
+#       S<-runif(n)#
+#       T<- as.vector(-log(S)/(k*exp(W%*%gamma)))#
+#       C <- runif(n,2,5)#
+#       time<-pmin(T, C)#
+#       event<-as.numeric(T < C) #
+#
+#   list(Ti=time, event=event, W=W)#
+# }#
+#
+sur_data = Ti_sim(alpha1=1, alpha2=0)
+Ti_sim = function(n=250, alpha1, alpha2, delta=c(1,1), gamma=c(1,1)){#
+    # random effects#
+    Sigma=matrix(c(0.09, 0.09*0.16, 0.09*0.16, 0.09), nrow=2, byrow=T)#
+    u=rmvnorm(n,c(0,0),Sigma)#
+    H = matrix(rnorm(2*n),n,2)#
+    W = matrix(rnorm(2*n),n,2)#
+#
+    # define the survival function#
+    surv = function(t) {#
+        if(alpha1==0 & alpha2==0) {res=t*exp(W%*%gamma)}#
+        else{#
+            res = ((exp(alpha2*u[,1]+alpha2*t*u[,2]+alpha1*delta[1]*H[,1]+alpha1*delta[2]*H[,2]*t+W%*%gamma)-exp(alpha1*H[,1]*delta[1]+W%*%gamma+alpha2*u[,1]))/(alpha2*u[,2]+alpha1*H[,2]*delta[2]))#
+        }#
+        return(exp(-res))#
+    }#
+#
+    rnd =runif(n) #
+    Ti = rep(Inf,n) #
+    # w = which(surv(1e8)-rnd < 0)#
+    w = which(1-surv(101)-rnd > 0)#
+    Ti[w] = sapply(w,function(j) uniroot(function(x) 1-surv(x)[j]-rnd[j],lower=0,upper=101)$root)#
+    Ti[Ti==0] = min(Ti[Ti>0])/2#
+    Ci = 5*rbeta(n,4,1)#
+    Delta = as.numeric(Ti < Ci)#
+    Ti2 = pmin(Ti, Ci)#
+#
+    list(Ti=Ti2, event=Delta, H=H, W=W)#
+}#
+#
+# Ti_sim2 = function(n=250, gamma=c(1,1), k=1){#
+#   W = matrix(rnorm(2*n), nrow=n)#
+#   time<-numeric(0)#
+#   event<-numeric(0)#
+#       S<-runif(n)#
+#       T<- as.vector(-log(S)/(k*exp(W%*%gamma)))#
+#       C <- runif(n,2,5)#
+#       time<-pmin(T, C)#
+#       event<-as.numeric(T < C) #
+#
+#   list(Ti=time, event=event, W=W)#
+# }#
+#
+sur_data = Ti_sim(alpha1=1, alpha2=0)
+setwd("/Users/askming/Documents/github/Projects/1.\ QRJM/simulaiton/R\ code/INLA_data/")#
+library(INLA)#
+data1 <- read.table("longitudinal.txt", header=TRUE) # long format#
+data2 <- read.table("survival.data.txt",header=T) # one row per subject#
+#
+N <- 467 # number of subjects or dim(data2)[1]#
+#
+##prepare the data set#
+ng = dim(data1)[1] # number of observations in long data#
+ns  = N#
+#
+## prepare the response variable#
+y.long <- c(data1$y, rep(NA, ns))
+head(y.long)
+y.surv <- inla.surv(time = c(rep(NA, ng), data2$time), event = c(rep(NA, ng),data2$event))#
+Yjoint <- list(y.long, y.surv)
+head(Yjoint)
+head(data1,n=20)
+m = matrix(seq(1:9), 3, 3)
+m
+library(reshape)
+install.packges('reshape')
+install.packages('reshape')
+library(reshape)
+rm = reshape(m)
+rm = reshape(m, direction='long')
+?reshape
+m
+cbind(id=c(1:3), m)
+rm = reshape(m, direction='long', id='id')
+?reshape
+rm = reshape(m, direction='long', idvar='id')
+rm = reshape(m, direction='long', idvar='id', varying='id')
+rm = reshape(m, direction='long', idvar='id', varying='Outcome')
+rm = reshape(m, direction='long', varying='Outcome')
+rm = reshape(m, direction='long', varying='id')
+m = as.data.frame(m)
+m
+m = cbind(id=seq(1,3), m)
+m
+rm = reshape(m, direction='long', varying='id')
+rm = reshape(m, direction='long', idvar='id')
+summary(Indometh)
+head(Indometh)
+wide <- reshape(Indometh, v.names = "conc", idvar = "Subject",#
+                timevar = "time", direction = "wide")#
+wide
+reshape(wide, direction = "long")
+m
+reshape(m, direction = "long")
+str(wide)
+reshape(m, direction = "long", varying=c('V1', 'V2','V3'))
+m = matrix(seq(1:9), 3, 3)#
+long_m = NULL#
+for (i in dim(m)[i]){#
+	long_m = c(long_m, m[i,])#
+}
+m = matrix(seq(1:9), 3, 3)#
+long_m = NULL#
+for (i in dim(m)[1]){#
+	long_m = c(long_m, m[i,])#
+}
+long_m
+m
+m = matrix(seq(1:9), 3, 3)#
+long_m = NULL#
+for (i in dim(m)[1]){#
+	long_m = c(long_m, m[i,])#
+}
+m
+long_m
+for (i in dim(m)[1]){#
+	print(m[i,])#
+	long_m = c(long_m, m[i,])#
+}
+dim(m)[1]
+m[1,]
+m = matrix(seq(1:9), 3, 3)#
+long_m = NULL#
+for (i in dim(m)[1]){#
+	print(m[i,])#
+}
+m = matrix(seq(1:9), 3, 3)#
+long_m = NULL#
+for (i in 1: dim(m)[1]){#
+	long_m = c(long_m, m[i,])#
+}
+long_m
+x = cbind(1, rnorm(10))
+x
+x = cbind(1, seq(1:10))
+x
+rep(x, each=2)
+long_x = rep(x, each=2)
+long_x
+matrix(NA, 10, 2)
+sim_longitudinal_data = function(survival_data=surdata, n=250, time=c(0, 0.25, 0.5, 0.75, 1, 3), tau, sigma=1, beta=c(1,1), delta=c(1,1)){#
+    # survival_data - data simulated from survival model#
+    # n - # of subjects#
+    # time - time points of observations#
+    # tau - quantile#
+    # sigma - scale parameter#
+    n_obs = length(time)#
+    time_long = rep(time, each=n_obs) # at most # = length(time) observations per patient#
+    H = U = matrix(NA, n*n_obs, 2)#
+    Y = rep(NA, n*n_obs) # wide format#
+    U[,1] = rep(survival_data$U[,1], each=n_obs) # random effects#
+    U[,2] = rep(survival_data$U[,2], each=n_obs)#
+    H[,1] = rep(survival_data$H[,1], each=n_obs)#
+    H[,2] = rep(survival_data$H[,2], each=n_obs)*time_long#
+    X = cbind(1, rep(rnorm(n), each=n_obs))#
+    Ti = survival_data$Ti#
+    count = sapply(Ti, function(x) sum(x > time)) # number of observations after drop-outs#
+    # random variable generation from ALD(0,sigma,p)#
+    rald = function(n, location=0, scale, p){#
+        u = rnorm(n)#
+        z = rexp(n)#
+        v = scale*z#
+        theta = (1-2*p)/(p*(1-p))#
+        tau = sqrt(2/(p*(1-p)))#
+        sample = theta * z + tau * sqrt(z) * u#
+    }#
+#
+    Y[i] = beta %*% X + delta %*% H + U %*% c(1, time_long) + rald(n*n_obs, scale=sigma, p=tau) #
+#
+    end = seq(6:n*n_obs, 6)#
+#
+    for(i in seq_along(end)){#
+        Y[count+6*(i-1)+1:end] = NA#
+    }#
+#
+}
+?f
+?inla.models
+?control.family
+?inla.models
+?f
+?inla.models
+?lapply
+ls()
+head(data1, 20)
+?control.family
+rm(list=ls())
+library(INLA)

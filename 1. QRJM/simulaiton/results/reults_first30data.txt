@@ -1,0 +1,48 @@
+# 2014/12/17-18
+# tau=0.25
+
+> post_summary(multi_fit10)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]  delta[1]  delta[2]  deviance  gamma[1] 
+    1.014     0.024     1.077     1.011     1.001     1.037 13073.627     1.033 
+ gamma[2]     sigma 
+    1.003     1.024 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2] delta[1] delta[2] deviance gamma[1] 
+   0.109    0.190    0.119    0.111    0.094    0.096   44.388    0.078 
+gamma[2]    sigma 
+   0.077    0.038 
+
+
+> post_summary(multi_fit01)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]  delta[1]  delta[2]  deviance  gamma[1] 
+    0.000     0.319     1.062     1.008     0.975     0.982 13216.909     1.008 
+ gamma[2]     sigma 
+    1.002     1.030 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2] delta[1] delta[2] deviance gamma[1] 
+   0.050    0.206    0.119    0.109    0.112    0.133   46.491    0.082 
+gamma[2]    sigma 
+   0.081    0.038 
+
+
+> post_summary(multi_fit11)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]  delta[1]  delta[2]  deviance  gamma[1] 
+    0.560     0.429     1.069     0.978     0.991     0.984 13048.513     1.020 
+ gamma[2]     sigma 
+    1.011     1.029 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2] delta[1] delta[2] deviance gamma[1] 
+   0.775    0.184    0.120    0.111    0.111    0.115   47.027    0.085 
+gamma[2]    sigma 
+   0.084    0.038 
+
+
+
+
+
