@@ -9,5 +9,5 @@ post_summary = function(fit){
 	list(mean=m, sd=sd)
 }
 
-post_summary(multi_fit11_30_500_25)
+post_summary(multi_fit11_100_500_75)
 post_summary(multi_fit01)

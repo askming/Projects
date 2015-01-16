@@ -242,16 +242,16 @@ clusterExport(cl=cl,ls())
 # save( QR_fit,file="QR_fit.Rdata")
 
 # simulate data
-multi_data = sim_multiple_data(N=30, alpha=c(0,1), tau=0.5)
+multi_data = sim_multiple_data(N=50, alpha=c(1,1), tau=0.75)
 
 ### 3
-multi_fit11_30_500_5 <- foreach(i=1:30,.packages=c("rjags","R2jags","foreach"),.verbose=T )%dopar%{ 
+multi_fit11_50_500_75 <- foreach(i=1:50,.packages=c("rjags","R2jags","foreach"),.verbose=T )%dopar%{ 
 	set.seed(123)
-  	temp <- QRJM_jags(multi_data[[i]], tau=0.5)
+  	temp <- QRJM_jags(multi_data[[i]], tau=0.75)
   	temp$BUGSoutput$summary
 }  
 
-setwd("/work/02784/myang3/QRJM/dataout/JAGS_QRJM_0113")
-save(multi_fit11_30_500_5,file="multi_fit11_30_500_5.Rdata")
+setwd("/work/02784/myang3/QRJM/dataout/JAGS_QRJM_0114")
+save(multi_fit11_50_500_75,file="multi_fit11_50_500_75.Rdata")
 
 

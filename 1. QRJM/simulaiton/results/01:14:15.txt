@@ -1,0 +1,78 @@
+> post_summary(multi_fit01_30_500_5)
+(0,1), 30 datasets, 500 sample size, 0.5 quantile, JAGS
+
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+   -0.010     1.036     0.990     0.997     0.985     0.983     0.997 26017.437 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.020     1.002     1.004     0.319    -0.024     0.293 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.037    0.396    0.058    0.058    0.057    0.056    0.072   57.445 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.059    0.059    0.026    0.103    0.168    0.102 
+
+
+———————
+(0,1), 30 datasets, 500 sample size, 0.75 quantile, JAGS
+> post_summary(multi_fit01_30_500_75)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+   -0.010     0.834     0.997     1.002     0.998     1.004     0.998 26444.913 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.005     0.997     1.000     0.312    -0.052     0.361 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.039    0.343    0.067    0.066    0.058    0.067    0.091   64.765 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.059    0.059    0.026    0.116    0.227    0.133 
+
+———————
+(1,1), 50 datasets, 500 sample size, 0.25 quantile, JAGS
+> post_summary(multi_fit11_50_500_25)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.025     0.925     0.994     1.001     0.989     0.996     0.986 26209.664 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    0.999     1.000     1.000     0.322    -0.061     0.312 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.077    0.430    0.071    0.066    0.062    0.060    0.068   64.110 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.060    0.060    0.026    0.115    0.187    0.112 
+
+
+———————
+(1,1), 50 datasets, 500 sample size, 0.5 quantile, JAGS
+> post_summary(multi_fit11_50_500_5)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.011     0.908     1.014     1.001     0.986     1.002     0.998 25742.474 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.000     1.016     1.001     0.326    -0.023     0.303 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.071    0.411    0.061    0.058    0.061    0.054    0.062   55.838 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.061    0.060    0.026    0.105    0.170    0.110 
+
+
+———————
+(1,1), 50 datasets, 500 sample size, 0.75 quantile, JAGS
+> post_summary(multi_fit11_50_500_75)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.012     0.823     0.983     1.008     0.980     0.994     1.005 26231.989 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+    1.014     1.014     1.000     0.327    -0.029     0.302 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.076    0.464    0.070    0.066    0.061    0.060    0.068   64.852 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.061    0.060    0.026    0.114    0.194    0.118 
+
