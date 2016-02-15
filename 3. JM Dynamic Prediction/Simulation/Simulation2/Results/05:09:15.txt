@@ -1,0 +1,49 @@
+# first try, there was some mistake in specifying the parameter in simulation
+# spent 2 hours
+> post_summary(sim2_5)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    0.624     0.938     1.476     1.000     0.141     0.685     0.983 25900.639 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.906    -0.635     0.952     1.281    -0.041     0.265 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.030    0.084    0.152    0.082    0.025    0.114    0.018   70.132 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.069    0.032    0.027    0.105    0.044    0.021 
+
+
+# 30 data sets, 15000 iteration and 5000 burnin
+# result looks fine
+> post_summary(sim2_5)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.002     1.037     1.031     1.001     1.005    -1.006     1.005 23017.948 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.011     0.993     0.997     0.304     0.001     0.270 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.067    0.178    0.087    0.084    0.061    0.063    0.034   46.887 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.060    0.059    0.034    0.102    0.128    0.060 
+
+# 2015/05/09, modified the model file a little bit and try to see if the inference method still works well
+# 30 data sets, 15000 iteration and 5000 burnin
+# result looks fine
+> post_summary(sim2_25)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.011     1.239     0.961     1.001     0.991    -0.989     0.993 23246.058 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.009     1.006     1.005     0.300    -0.003     0.266 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.078    0.307    0.104    0.095    0.063    0.070    0.039   70.477 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.061    0.061    0.034    0.105    0.135    0.057 
+
+
+

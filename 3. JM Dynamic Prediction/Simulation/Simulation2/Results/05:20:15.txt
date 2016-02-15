@@ -1,0 +1,65 @@
+### simulation results for inference method ###
+### new parameter setting :sample size 500
+# sim_data = sim_multiple_data(30, alpha=c(1,1),tau=0.25, beta=c(1, 1), delta=c(-1,1), gamma=c(-1,1))
+
+### using original model fit, alpha2 looks bad ###
+> post_summary(sim2_25_0520)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.103     1.477     0.963     0.994     0.944    -0.983     0.991 26515.097 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.029     1.027     0.992     0.322    -0.235     0.302 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.103    0.764    0.075    0.065    0.076    0.062    0.064  160.316 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.069    0.071    0.026    0.105    0.199    0.087 
+
+### do it again after changing the model file back, looks better
+> post_summary(sim2_25_0520_originafit2)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.024     0.919     1.005     0.999     1.016    -0.984     1.000 26661.045 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -0.988     1.026     0.999     0.304     0.028     0.299 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.072    0.283    0.072    0.066    0.062    0.060    0.060   64.653 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.059    0.060    0.025    0.102    0.156    0.096 
+
+### ——— ### do prediction using this
+
+
+### using meaning regression to fit the data ###
+> post_summary(sim2_25_0520_LMJM)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.018     0.487     3.660     1.010     0.978    -1.017     0.984 28546.303 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.003     0.994     4.222     0.356    -0.107     0.339 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.092    0.314    0.113    0.105    0.060    0.083    0.081   27.251 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.060    0.059    0.075    0.144    0.183    0.111 
+
+### Second try, use n.chian=3
+> post_summary(sim2_25_0520_LMJM)
+$mean
+   alpha1    alpha2   beta[1]   beta[2]         c  delta[1]  delta[2]  deviance 
+    1.019     0.582     3.664     1.011     0.979    -1.016     0.984 28546.337 
+ gamma[1]  gamma[2]     sigma       w11       w21       w22 
+   -1.003     0.994     4.223     0.332    -0.080     0.326 
+
+$sd
+  alpha1   alpha2  beta[1]  beta[2]        c delta[1] delta[2] deviance 
+   0.093    0.686    0.117    0.105    0.061    0.085    0.081   29.016 
+gamma[1] gamma[2]    sigma      w11      w21      w22 
+   0.060    0.060    0.075    0.156    0.200    0.132 
+
+
+

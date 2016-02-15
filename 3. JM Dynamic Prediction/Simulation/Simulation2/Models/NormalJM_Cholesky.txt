@@ -1,0 +1,48 @@
+model{
+
+        for (i in 1:I){
+                # prior for random effects
+                u[i, 1:2] ~ dmnorm(zero[], precision[,])
+
+        # longitudinal process, linear mixed model
+                for (j in 1:J[i]){
+                        mu[i,j] <- u[i,1] + u[i,2]*t[j] + inprod(X[i,], beta[]) + delta[1]*H[i,1] + delta[2]*H[i,2]*t[j]
+                        y[i,j] ~ dnorm(mu[i,j], tau)
+                } #end of j loop
+
+        # survival process, baseline hazard is set to 1
+        A[i] <- alpha2*u[i,2] + alpha1*delta[2]*H[i,2]
+        B[i] <- alpha1*delta[1]*H[i,1] + alpha2*u[i,1] + inprod(gamma, W[i,])
+        S[i] <- exp(- c*exp(B[i])*(pow(exp(A[i]), Ti[i])-1)/A[i])
+        h[i] <- c*exp(inprod(gamma, W[i,]) + alpha1*(delta[1]*H[i,1] + delta[2]*H[i,2]*Ti[i]) + alpha
+        L[i] <- pow(h[i], event[i])*S[i]/1.0E+08
+
+        # zero trick
+        phi[i] <- -log(L[i])
+        zeros[i] ~ dpois(phi[i])
+
+        }#end of i loop
+
+        precision[1:2,1:2] <- inverse(Sigma[,])
+        Sigma[1,1] <- pow(w11, 2)
+        Sigma[1,2] <- w21*w11
+        Sigma[2,1] <- Sigma[1,2]
+        Sigma[2,2] <- pow(w22,2) + pow(w21,2)
+        rho <- Sigma[2,1]/sqrt(Sigma[1,1]*Sigma[2,2])
+
+        # priors for other parameters
+        alpha1 ~ dnorm(0, 0.001)
+        alpha2 ~ dnorm(0, 0.001)
+        beta[1] ~ dnorm(0, 0.001)
+        beta[2] ~ dnorm(0, 0.001)
+        delta[1] ~ dnorm(0, 0.001)
+        delta[2] ~ dnorm(0, 0.001)
+        gamma[1] ~ dnorm(0, 0.001)
+        gamma[2] ~ dnorm(0, 0.001)
+        sigma ~ dgamma(0.001, 0.001) # std for random error
+        tau <- pow(sigma, -2) # precision of random error
+        w11 ~ dunif(0.1, 10)
+        w22 ~ dunif(0.1, 10)
+        w21 ~ dnorm(0, 0.1)
+        c ~ dunif(0.01, 10)
+}

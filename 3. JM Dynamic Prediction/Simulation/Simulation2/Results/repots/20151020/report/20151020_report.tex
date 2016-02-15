@@ -1,0 +1,405 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage {setspace}
+\usepackage[hang,flushmargin]{footmisc} %control footnote indent
+\usepackage{url} % for website links
+\usepackage{amssymb,amsmath}%for matrix
+\usepackage{graphicx}%for figure
+\usepackage{appendix}%for appendix
+\usepackage{float}
+\floatstyle{plaintop}
+\restylefloat{table}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{morefloats}%in case there are too many float tables and figures
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subtable]{font=normal}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+\usepackage{appendix}
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{rotating} % rotate table by some degree
+\usepackage{rotfloat}
+\usepackage{mwe}
+\usepackage{morefloats}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subtable]{font=normal}
+\usepackage{listings}
+\usepackage{adjustbox}
+
+%\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codeblack}{rgb}{0,0,0}
+
+\lstdefinestyle{mystyle}{
+    %backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegray},
+    keywordstyle=\color{codeblack},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeblack},
+    basicstyle=\normalsize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+%\usepackage{Sweave}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
+
+\graphicspath{{../plots/}}
+
+% \doublespace
+
+\begin{document}
+
+\title{Simulation report -- prediction of survival probabilities}
+\author{Ming Yang}
+% \date{}
+\maketitle
+
+% \tableofcontents
+% \listoftables
+% \listoffigures
+\section{Objective}
+To compare the predictive capabilities of survival probabilities between QRJM and JM using linear mixed model (LMJM) for data from different distribution features.\par
+
+
+\section{Simulation procedure}
+\begin{enumerate}
+\item  Define different simulation scenarios in terms of the distribution of random error and simulate 100 data sets for each scenario (see below for the specification of scenarios). Each simulated data set has 600 subjects, 500 out of which will be used to fit the model for inference purpose and the rest 100 will be used to make predictions and validation.
+\item  Fit the data using QRJM and LMJM respectively and save the posterior samples of the model parameters.
+\item  Validation data preparation: choose a time $t$ so that all the patients selected to for prediction will only have longitudinal measurements up to this time $t$.
+\item  Make predictions of subject-specific random effects: use saved posterior samples in step 2 and longitudinal measurements from step 3 to predict subject-specific random effects for every subject in the validation samples.
+\item  Calculate the predictions of survival probabilities for all the subjects in validation data for some time $u = t + \Delta t$ ($\Delta t > 0$).
+\item Summarize the result: make Bland-Altman plots and calculate the MSE and bias for our predictions versus the gold standard, which is calculated from the true simulated values (i.e. the random effects and the parameters).
+\end{enumerate}
+
+\section{Simulation scenarios and results}
+
+\begin{equation}\label{eqn:joint}
+\left\{
+\begin{array}{l}
+Y_{it} = {\boldsymbol X}_{it}^{\top}\boldsymbol{\beta} + {\boldsymbol H}_{it}^{\top}\boldsymbol{\delta} + {\boldsymbol Z}_{it}^{\top}{\boldsymbol u}_i + \varepsilon_{it}, \varepsilon_{it}\sim ALD(0, \sigma,\tau)\\
+h(T_i|\mathcal{T}_{iT_i}, {\boldsymbol W}_i;  \boldsymbol{\gamma}, \alpha_1,
+\alpha_2) = h_0(T_i)\exp({\boldsymbol W}_i^{\top}\boldsymbol{\gamma} + \alpha({\boldsymbol H}_{iT_i}^{\top}\boldsymbol{\delta} + {\boldsymbol Z}_{iT_i}^{\top}{\boldsymbol u}_{i}))
+\end{array}
+\right.
+\end{equation}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.6\textwidth]{ald_ld_normal.pdf}
+% \end{figure}
+
+There are three scenarios in the simulation study:
+\begin{enumerate}
+\item Scenarios One: data are generated using Model (\ref{eqn:joint}). Choose the $\tau=$ {\bf 0.25} for the ALD distribution.
+\item Scenarios Two: data are generated using Model (\ref{eqn:joint}). Choose $\tau= ${\bf 0.5} for the ALD distribution.
+\item Scenario Three: data are generated using Model (\ref{eqn:joint}), but the random error follows standard normal distribution instead of ALD.
+\end{enumerate}
+
+
+
+
+\subsection{Inference results (from previous simulation)}
+% qt25, median then normal fit
+% latex table generated in R 3.1.2 by xtable 1.7-4 package
+% Mon Jul 27 22:17:34 2015
+\begin{table}[H]
+\centering
+\caption{Inference result for Scenario One}
+\begin{tabular}{rccccccccccc}
+\hline
+& \multicolumn{3}{c}{QRJM ($\tau=0.25$), true model} & &\multicolumn{3}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{3}{c}{LMJM}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}  \cline{10-12}
+  alpha & 0.008 & 0.110 & 0.012 & & -0.003 & 0.131 & 0.017 & & -0.012 & 0.138 & 0.019 \\
+  beta[1] & -0.001 & 0.101 & 0.010 & & 1.697 & 0.156 & 2.904 & & 2.683 & 0.174 & 7.227 \\
+  beta[2] & -0.005 & 0.096 & 0.009 & & 0.002 & 0.132 & 0.017 & & 0.014 & 0.150 & 0.023 \\
+  c & -0.007 & 0.090 & 0.008 & & -0.004 & 0.091 & 0.008 & & -0.007 & 0.090 & 0.008 \\
+  delta[1] & 0.002 & 0.085 & 0.007 & & 0.019 & 0.113 & 0.013 & & 0.029 & 0.129 & 0.018 \\
+  delta[2] & 0.009 & 0.092 & 0.009 & & 0.018 & 0.110 & 0.012 & & 0.038 & 0.128 & 0.018 \\
+  gamma[1] & 0.007 & 0.083 & 0.007 & & 0.012 & 0.086 & 0.007 & & 0.007 & 0.085 & 0.007 \\
+  gamma[2] & -0.001 & 0.087 & 0.008 & & 0.005 & 0.090 & 0.008 & & 0.000 & 0.089 &  0.008 \\
+  sigma & -0.001 & 0.034 & 0.001 & & -0.319 & 0.025 & 0.103 & & - & - & - \\
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+% qt25, median then normal fit
+% latex table generated in R 3.1.2 by xtable 1.7-4 package
+% Mon Jul 27 22:39:39 2015
+% \begin{table}[H]
+% \centering
+% \caption{Inference result for Scenario Two}
+% \begin{tabular}{rccccccccccc}
+% \hline
+% & \multicolumn{3}{c}{QRJM ($\tau=0.25$)} & &\multicolumn{3}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{3}{c}{LMJM}\\
+% \hline
+%  & bias & se & MSE & & bias & se & MSE & & bias & se & MSE \\
+%  \cline{2-4}  \cline{6-8}  \cline{10-12}
+%   alpha1 & -0.09 & 0.09 & 0.02 & & -0.07 & 0.09 & 0.01 & & 0.49 & 0.49 & 0.48 \\
+%   alpha2 & -0.35 & 0.37 & 0.26 & & 0.23 & 0.76 & 0.63 & & -0.05 & 0.55 & 0.31 \\
+%   beta[1] & -1.42 & 0.15 & 2.03 & & -0.00 & 0.11 & 0.01 & & -0.43 & 0.39 & 0.33 \\
+%   beta[2] & -0.01 & 0.10 & 0.01 & & 0.00 & 0.08 & 0.01 & & -0.00 & 0.12 & 0.01 \\
+%   c & 0.11 & 0.17 & 0.04 & & 0.10 & 0.17 & 0.04 & & -0.09 & 0.20 & 0.05 \\
+%   delta[1] & -0.01 & 0.09 & 0.01 & & 0.00 & 0.07 & 0.01 & & 0.20 & 0.16 & 0.07 \\
+%   delta[2] & -0.01 & 0.07 & 0.01 & & -0.00 & 0.06 & 0.00 & & -0.10 & 0.21 & 0.05 \\
+%   gamma[1] & 0.09 & 0.04 & 0.01 & & 0.08 & 0.04 & 0.01 & & 0.00 & 0.05 & 0.00 \\
+%   gamma[2] & -0.09 & 0.04 & 0.01 & & -0.08 & 0.04 & 0.01 & & -0.01 & 0.06 & 0.00 \\
+%   sigma & 0.26 & 0.05 & 0.07 & & 0.01 & 0.04 & 0.00 & & - & - & - \\
+%    \hline
+% \end{tabular}
+% \end{table}
+
+\begin{table}[H]
+\centering
+\caption{Inference result for Scenario Two}
+\begin{tabular}{rccccccc}
+\hline
+& \multicolumn{3}{c}{QRJM ($\tau=0.5$), true model} & & \multicolumn{3}{c}{LMJM}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}
+  alpha & 0.013 & 0.094 & 0.009 & & 0.013 & 0.106 & 0.011 \\
+  beta[1] & -0.007 & 0.089 & 0.008 & & -0.009 & 0.112 & 0.013 \\
+  beta[2] & 0.011 & 0.080 & 0.007 & & 0.013 & 0.103 & 0.011 \\
+  c & 0.002 & 0.084 & 0.007 & & -0.001 & 0.086 & 0.007 \\
+  delta[1] & -0.009 & 0.075 & 0.006 & & -0.006 & 0.092 & 0.009 \\
+  delta[2] & 0.002 & 0.082 & 0.007 & & 0.006 & 0.097 & 0.009 \\
+  gamma[1] & 0.009 & 0.090 & 0.008& & 0.009 & 0.090 & 0.008\\
+  gamma[2] & 0.001 & 0.086 & 0.007 & & 0.002 & 0.087 & 0.008 \\
+  sigma & 0.003 & 0.037 & 0.001 & & - & - & - \\
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+% median then mean fit
+% latex table generated in R 3.1.2 by xtable 1.7-4 package
+% Sun Aug  2 20:33:08 2015
+\begin{table}[H]
+\centering
+\caption{Inference result for Scenario Three}
+\begin{tabular}{rccccccc}
+\hline
+& \multicolumn{3}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{3}{c}{LMJM, true model}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}
+  alpha & -0.012 & 0.075 & 0.006 & & 0.004 & 0.076 & 0.006 \\
+  beta[1] & 0.013 & 0.050 & 0.003 & & 0.003 & 0.046 & 0.002 \\
+  beta[2] & 0.001 & 0.045 & 0.002 & & 0.002 & 0.043 & 0.002 \\
+  c & 0.001 & 0.082 & 0.007& & 0.005 & 0.081 & 0.007 \\
+  delta[1] & 0.007 & 0.045 & 0.002 & & 0.001 & 0.041 & 0.002 \\
+  delta[2] & 0.008 & 0.058 & 0.003 & & 0.000 & 0.055 & 0.003 \\
+  gamma[1] & -0.003 & 0.081 & 0.007 & & -0.007 & 0.080 & 0.006 \\
+  gamma[2] & -0.002 & 0.085 & 0.007 & &  -0.006 & 0.084 & 0.007 \\
+  sigma & - & - & - & & 0.001 & 0.029 & 0.001 \\
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+\subsection{BA plots of predictions from the model vs. gold standard}
+
+\subsubsection*{Scenario One Only}
+
+\begin{enumerate}
+\item $t=0.25$
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\textwidth]{qt25fit_t1.pdf}
+\includegraphics[width=0.45\textwidth]{meanfit_t1.pdf}
+\caption{BA plot: predictions with first two longitudinal observations available: QRJM(left) and LMJM(right)}
+\end{figure}
+
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{meanfit_t1.pdf}
+% \caption{BA plot: data fitted using LMJM}
+% \end{figure}
+
+\item $t=0.50$
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\textwidth]{qt25fit_t2.pdf}
+\includegraphics[width=0.45\textwidth]{meanfit_t2.pdf}
+\caption{BA plot: predictions with first three longitudinal observations available: QRJM(left) and LMJM(right)}
+\end{figure}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{meanfit_t2.pdf}
+% \caption{BA plot: data fitted using LMJM}
+% \end{figure}
+
+\item $t=0.75$
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\textwidth]{qt25fit_t3.pdf}
+\includegraphics[width=0.45\textwidth]{meanfit_t3.pdf}
+\caption{BA plot: predictions with first four longitudinal observations available: QRJM(left) and LMJM(right)}
+\end{figure}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{meanfit_t3.pdf}
+% \caption{BA plot: data fitted using LMJM}
+% \end{figure}
+\end{enumerate}
+
+
+% \subsubsection*{Scenario Two}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{qt50data_qt50pred_more.pdf}
+% \caption{BA plot: data fitted with JM using QR model with $\tau=0.5$}
+% \end{figure}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{qt50data_normpred_more.pdf}
+% \caption{BA plot: data fitted using LMJM}
+% \end{figure}
+
+
+
+% \subsubsection*{Scenario Three}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{normdata_normpred_more.pdf}
+% \caption{BA plot: data fitted using LMJM}
+% \end{figure}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{normdata_qt50pred_more.pdf}
+% \caption{BA plot: data fitted with JM using QR model with $\tau=0.5$}
+% \end{figure}
+
+
+
+\subsection{Predictive accuracy (for Scenario One only)}
+
+\begin{table}[H]
+\centering
+\caption{MSE and bias (compared with gold standard) of predicted survival probabilities from two models}
+\begin{tabular}{clcccccccc}
+\hline
+Scenario One & & \multicolumn{2}{c}{QRJM ($\tau=0.25$)} & &\multicolumn{2}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{2}{c}{LMJM} \\
+\cline{3-4}\cline{6-7}\cline{9-10}
+ & & MSE & Bias & & MSE & Bias & & MSE & Bias \\
+\hline
+\multirow{3}{*}{t=0.25} & $\Delta t$ = 0.25 & 0.004 & -0.002 &&  & && 0.004 & -0.002 \\
+& $\Delta t$ = 1 & 0.009 & -0.003 && & && 0.009 & -0.003 \\
+& $\Delta t$ = 2 & 0.012 & -0.004 && & && 0.012 & -0.004 \\
+& $\Delta t$ = 3 & 0.014 & -0.005 && & && 0.014 & -0.005 \\
+\hline
+\multirow{3}{*}{t=0.5} & $\Delta t$ =0.25  & 0.004 & -0.004 && & && 0.004 & -0.004 \\
+& $\Delta t$ = 1 & 0.011 & -0.005 && & && 0.011 & -0.005 \\
+& $\Delta t$ = 2 & 0.015 & -0.006 && & && 0.015 & -0.006 \\
+& $\Delta t$ = 3 & 0.018 & -0.007 && & && 0.018 & -0.007 \\
+\hline
+\multirow{3}{*}{t=0.75} & $\Delta t$ =0.25 & 0.004 & -0.005 && & && 0.004 & -0.006 \\
+& $\Delta t$ = 1 & 0.012 & -0.008 && & && 0.013 & -0.007 \\
+& $\Delta t$ = 2 & 0.018 & -0.008 && & && 0.018 & -0.008 \\
+& $\Delta t$ = 3 & 0.020 & -0.009 && & && 0.021 & -0.009  \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+\caption{AUC, AARD and MRD of predicted survival probabilities}
+\adjustbox{max width=\textwidth}{
+    \begin{tabular}{clccccccccccc}
+    \hline
+    Scenario One & & \multicolumn{3}{c}{AUC} & &\multicolumn{3}{c}{AARD} & & \multicolumn{3}{c}{MRD} \\
+    \cline{3-5}\cline{7-9}\cline{11-13}
+     & & gold standard & QRJM  & LMJM & & gold standard & QRJM  & LMJM & & gold standard & QRJM  & LMJM \\
+    \hline
+     \multirow{3}{*}{t=0.25} & $\Delta t$ =0.25 & 0.825 & 0.823 & 0.823 && 0.170 & 0.178 & 0.178 && 0.252 & 0.250 & 0.250 \\
+    & $\Delta t$ = 1 & 0.874 & 0.870 & 0.870 && 0.517 & 0.511 & 0.510 && 0.428 & 0.418 & 0.418 \\
+    & $\Delta t$ = 2 & 0.911 & 0.905 & 0.905 && 0.651 & 0.638 & 0.638 && 0.509 & 0.492 & 0.491 \\
+    & $\Delta t$ = 3 & 0.930 & 0.923 & 0.923 && 0.701 & 0.684 & 0.683 && 0.549 & 0.527 & 0.526 \\
+    \hline
+    \multirow{3}{*}{t=0.5} & $\Delta t$ = 0.25 & 0.815 & 0.814 & 0.814 && 0.169 & 0.176 & 0.176 && 0.204 & 0.208 & 0.208 \\
+    & $\Delta t$ = 1 & 0.868 & 0.864 & 0.864 && 0.530 & 0.527 & 0.527 && 0.411 & 0.403 & 0.403 \\
+    & $\Delta t$ = 2 & 0.907 & 0.901 & 0.901 && 0.643 & 0.630 & 0.630 && 0.512 & 0.493 & 0.492 \\
+    & $\Delta t$ = 3 & 0.927 & 0.920 & 0.919 && 0.686 & 0.668 & 0.665 && 0.559 & 0.536 & 0.534 \\
+    \hline
+    \multirow{3}{*}{t=0.75} & $\Delta t$ =0.25 & 0.816 & 0.816 & 0.816 && 0.178 & 0.199 & 0.200 && 0.185 & 0.190 & 0.190 \\
+    & $\Delta t$ = 1 & 0.870 & 0.866 & 0.866 && 0.546 & 0.541 & 0.542 && 0.410 & 0.402 & 0.402 \\
+    & $\Delta t$ = 2 & 0.908 & 0.902 & 0.901 && 0.644 & 0.628 & 0.627 && 0.519 & 0.501 & 0.499 \\
+    & $\Delta t$ = 3 & 0.927 & 0.920 & 0.920 && 0.686 & 0.664 & 0.662 && 0.572 & 0.548 & 0.546 \\
+    \hline
+    \end{tabular}
+    }
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{data42sub20_t1_t3.pdf}
+\caption{Dynamic predictions from increasing number of longitudinal observations (subject 20)}
+\end{figure}
+
+% \subsection{Comments}
+% \begin{enumerate}
+% \item In both model settings, the accuracy (in terms of MSE and the BA plots) of predictions decreases as $\Delta t$ increases, which makes sense as it's more difficult to accurately predict the survival for longer time in the future since there are more variabilities and uncertainty.
+% \item QRJM and LMJM perform closely in predicting the survival probabilities in all three scenarios although the inference results from the true model is better than others. I have no formal interpretation yet but thinking that probably it is because in the prediction part we only use parameters $\alpha$, $\delta$ and $\gamma$ to calculate the survival probabilities (But we used all the model parameters in predicting random effects), whose estimation from both model settings are pretty accurate and close to truth.
+% \end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,294 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage {setspace}
+\usepackage[hang,flushmargin]{footmisc} %control footnote indent
+\usepackage{url} % for website links
+\usepackage{amssymb,amsmath}%for matrix
+\usepackage{graphicx}%for figure
+\usepackage{appendix}%for appendix
+\usepackage{float}
+\floatstyle{plaintop}
+\restylefloat{table}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{morefloats}%in case there are too many float tables and figures
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subtable]{font=normal}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+\usepackage{appendix}
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{rotating} % rotate table by some degree
+\usepackage{rotfloat}
+\usepackage{mwe}
+\usepackage{morefloats}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subtable]{font=normal}
+\usepackage{listings}
+
+%\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codeblack}{rgb}{0,0,0}
+
+\lstdefinestyle{mystyle}{
+    %backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegray},
+    keywordstyle=\color{codeblack},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeblack},
+    basicstyle=\normalsize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+%\usepackage{Sweave}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
+
+\graphicspath{{../plots/}}
+
+% \doublespace
+
+\begin{document}
+
+\title{Simulation report -- prediction of survival probabilities}
+\author{Ming Yang}
+% \date{}
+\maketitle
+
+% \tableofcontents
+% \listoftables
+% \listoffigures
+\section{Objective}
+To compare the predictive capabilities of survival probabilities between QRJM and JM using linear mixed model (LMJM) for data from different distribution features.\par
+
+
+\section{Simulation procedure}
+\begin{enumerate}
+\item  Define different simulation scenarios in terms of the distribution of random error and simulate 30 data sets for each scenario (see below for the specification of scenarios). Each simulated data set has 520 subjects, 500 out of which will be used to fit the model for inference purpose and the rest 20 will be used to make predictions and validation.
+\item  Fit the data using QRJM and LMJM respectively and save the posterior samples of the model parameters.
+\item  Validation data preparation: choose a time $t$ so that all the patients selected to for prediction will only have longitudinal measurements up to this time $t$.
+\item  Make predictions of subject-specific random effects: use saved posterior samples in step 2 and longitudinal measurements from step 3 to predict subject-specific random effects for every subject in the validation samples.
+\item  Calculate the predictions of survival probabilities for all the subjects in validation data for some time $u = t + \Delta t$ ($\Delta t > 0$).
+\item Summarize the result: make Bland-Altman plots and calculate the MSE and bias for our predictions versus the gold standard, which is calculated from the true simulated values (i.e. the random effects and the parameters).
+\end{enumerate}
+
+\section{Simulation scenarios and results}
+
+\begin{equation}\label{eqn:joint}
+\left\{
+\begin{array}{l}
+Y_{it} = {\boldsymbol X}_{it}^{\top}\boldsymbol{\beta} + {\boldsymbol H}_{it}^{\top}\boldsymbol{\delta} + {\boldsymbol Z}_{it}^{\top}{\boldsymbol u}_i + \varepsilon_{it}, \varepsilon_{it}\sim ALD(0, \sigma,\tau)\\
+h(T_i|\mathcal{T}_{iT_i}, {\boldsymbol W}_i;  \boldsymbol{\gamma}, \alpha_1,
+\alpha_2) = h_0(T_i)\exp({\boldsymbol W}_i^{\top}\boldsymbol{\gamma} + \alpha_1{\boldsymbol H}_{iT_i}^{\top}\boldsymbol{\delta} + \alpha_2{\boldsymbol Z}_{iT_i}^{\top}{\boldsymbol u}_{i})
+\end{array}
+\right.
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{ald_ld_normal.pdf}
+\end{figure}
+
+\subsection{Scenario one}
+In this scenario data are generated using Model (\ref{eqn:joint}). Choose the $\tau=$ {\bf 0.25} for the ALD distribution.
+
+
+% qt25, median then normal fit
+% latex table generated in R 3.2.0 by xtable 1.7-4 package
+% Fri Jul 17 13:43:47 2015
+\begin{table}[H]
+\centering
+\caption{Summary table of inference result}
+\begin{tabular}{rccccccccccc}
+\hline
+& \multicolumn{3}{c}{QRJM ($\tau=0.25$)} & &\multicolumn{3}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{3}{c}{LMJM}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}  \cline{10-12}
+  alpha1 & -0.10 & 0.09 & 0.02 & & -0.07 & 0.08 & 0.01 & & 0.42 & 0.33 & 0.28 \\
+  alpha2 & 0.07 & 0.80 & 0.64 & & 0.11 & 0.83 & 0.70 & & -0.15 & 0.64 & 0.44 \\
+  beta1 & -0.01 & 0.12 & 0.01 & & 0.02 & 0.11 & 0.01 & & -0.41 & 0.46 & 0.38 \\
+  beta2 & -0.00 & 0.10 & 0.01 & & 0.00 & 0.08 & 0.01 & & 0.00 & 0.12 & 0.01 \\
+  c & 0.11 & 0.18 & 0.04 & & 0.10 & 0.16 & 0.04 & & -0.10 & 0.20 & 0.05 \\
+  delta1 & 0.00 & 0.08 & 0.01 & & 0.01 & 0.08 & 0.01 & & 0.20 & 0.16 & 0.06 \\
+  delta2 & -0.00 & 0.07 & 0.00 & & -0.01 & 0.06 & 0.00 & & -0.08 & 0.21 & 0.05 \\
+  gamma1 & 0.09 & 0.04 & 0.01 & & 0.08 & 0.05 & 0.01 & & 0.01 & 0.07 & 0.00 \\
+  gamma2 & -0.10 & 0.04 & 0.01 & & -0.08 & 0.04 & 0.01 & & -0.00 & 0.06 & 0.00 \\
+  sigma & 0.00 & 0.04 & 0.00 & & -0.00 & 0.04 & 0.00 & & - & - & - \\
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_LMJM_qt25.pdf}
+\caption{BA plot: data fitted with JM using linear mixed model}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_QRJM_qt25.pdf}
+\caption{BA plot: data fitted with JM using QR model with $\tau=0.25$}
+\end{figure}
+
+\subsection{Scenario two}
+In this scenario data are generated using Model (\ref{eqn:joint}). Choose $\tau= ${\bf 0.5} for the ALD distribution.
+
+
+% median then normal fit
+% latex table generated in R 3.2.0 by xtable 1.7-4 package
+% Fri Jul 17 13:46:32 2015
+\begin{table}[H]
+\centering
+\caption{Summary table of inference result}
+\begin{tabular}{rccccccc}
+  \hline
+& \multicolumn{3}{c}{QRJM ($\tau=0.5$)} & & \multicolumn{3}{c}{LMJM}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}
+alpha1 & -0.07 & 0.08 & 0.01 & & 0.42 & 0.33 & 0.28 \\
+  alpha2 & 0.11 & 0.83 & 0.70 & & -0.15 & 0.64 & 0.44 \\
+  beta1 & 0.02 & 0.11 & 0.01 & & -0.41 & 0.46 & 0.38 \\
+  beta2 & 0.00 & 0.08 & 0.01 & & 0.00 & 0.12 & 0.01 \\
+  c & 0.10 & 0.16 & 0.04 & & -0.10 & 0.20 & 0.05 \\
+  delta1 & 0.01 & 0.08 & 0.01 & & 0.20 & 0.16 & 0.06 \\
+  delta2 & -0.01 & 0.06 & 0.00 & & -0.08 & 0.21 & 0.05 \\
+  gamma1 & 0.08 & 0.05 & 0.01 & & 0.01 & 0.07 & 0.00 \\
+  gamma2 & -0.08 & 0.04 & 0.01 & & -0.00 & 0.06 & 0.00 \\
+  sigma & -0.00 & 0.04 & 0.00 & & - & - & - \\
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_LMJM_qt50data.pdf}
+\caption{BA plot: data fitted with JM using linear mixed model}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_QRJM_qt50data.pdf}
+\caption{BA plot: data fitted with JM using QR model with $\tau=0.5$}
+\end{figure}
+
+
+\subsection{Scenario three}
+In this scenario data are generated using Model (\ref{eqn:joint}), but the random error follows standard normal distribution instead of ALD.
+
+
+
+% normal then median fit
+% Fri Jul 17 13:48:05 2015
+\begin{table}[H]
+\centering
+\caption{Summary table of inference result}
+\begin{tabular}{rccccccc}
+\hline
+& \multicolumn{3}{c}{LMJM} & & \multicolumn{3}{c}{QRJM ($\tau=0.5$)}\\
+\hline
+ & bias & se & MSE & & bias & se & MSE \\
+ \cline{2-4}  \cline{6-8}
+alpha1 & -0.14 & 0.06 & 0.02 & & -0.11 & 0.06 & 0.01 \\
+  alpha2 & 0.28 & 0.39 & 0.23 & & -0.01 & 0.17 & 0.03 \\
+  beta1 & 0.02 & 0.07 & 0.00 & & 0.02 & 0.07 & 0.00 \\
+  beta2 & -0.00 & 0.04 & 0.00 & & -0.00 & 0.04 & 0.00 \\
+  c & 0.14 & 0.14 & 0.04 & & 0.08 & 0.14 & 0.03 \\
+  delta1 & 0.00 & 0.05 & 0.00 & & 0.00 & 0.05 & 0.00 \\
+  delta2 & -0.00 & 0.04 & 0.00 & & 0.00 & 0.04 & 0.00 \\
+  gamma1 & 0.13 & 0.04 & 0.02 & & 0.10 & 0.04 & 0.01 \\
+  gamma2 & -0.13 & 0.04 & 0.02 & & -0.09 & 0.04 & 0.01 \\
+  sigma & 0.00 & 0.03 & 0.00 & & - & - & -\\
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_LMJM_normaldata.pdf}
+\caption{BA plot: data fitted with JM using linear mixed model}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{ba_QRJM_normaldata.pdf}
+\caption{BA plot: data fitted with JM using QR model with $\tau=0.5$}
+\end{figure}
+
+
+
+
+
+\subsection{Summary table -- predictions}
+
+\begin{table}[H]
+\centering
+\caption{MSE and bias of the predictions of survival probabilities from two models ($\Delta t_1<\Delta t_2<\Delta t_3$)}
+\begin{tabular}{ccccccc}
+\hline
+Scenario & & \multicolumn{2}{c}{LMJM} & & \multicolumn{2}{c}{QRJM} \\
+\cline{3-4}\cline{6-7}
+ & & MSE & Bias & & MSE & Bias \\
+\hline
+\multirow{3}{*}{1} & $\Delta t_1$ & 0.003 &  0.010 & & 0.003 & 0.009 \\
+& $\Delta t_2$ & 0.005 & -0.005 & & 0.004 & -0.004 \\
+& $\Delta t_3$ & 0.009 & -0.013 & & 0.008 & -0.008 \\
+\hline
+\multirow{3}{*}{2} & $\Delta t_1$ & 0.002 & -0.000 & & 0.002 & 0.006 \\
+& $\Delta t_2$ & 0.006 & -0.018 & & 0.005 & 0.005 \\
+& $\Delta t_3$ & 0.023 & -0.044 & & 0.009 & 0.002 \\
+\hline
+\multirow{3}{*}{3} & $\Delta t_1$ & 0.003 &  0.005 & & 0.002 &  0.005 \\
+& $\Delta t_2$ & 0.006 & -0.008 & & 0.006 & -0.002 \\
+& $\Delta t_3$ & 0.010 &-0.013 & & 0.010 & -0.003 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\subsection{Comments}
+\begin{enumerate}
+\item In both model setting, the accuracy (in terms of MSE and bias) of predictions decreases as $\Delta t$ increases, which makes sense as it's more difficult to accurately predict the survival for longer time in the future since there are more variabilities and uncertainty.
+\item QRJM and LMJM perform closely in predicting the survival probabilities when $\Delta t$ is smaller but when $\Delta t$ increases QRJM will outperform LMJM based on the BA plots, bias and MSE.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

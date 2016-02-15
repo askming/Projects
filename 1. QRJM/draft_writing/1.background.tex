@@ -1,73 +1,103 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{fullpage}
-\usepackage {setspace}
-\usepackage[hang,flushmargin]{footmisc} %control footnote indent
-\usepackage{url} % for website links
-\usepackage{amssymb,amsmath}%for matrix
-\usepackage{graphicx}%for figure
-\usepackage{appendix}%for appendix
-\usepackage{float}
-\usepackage{multirow}
-\usepackage{longtable}
-\usepackage{morefloats}%in case there are too many float tables and figures
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{listings}
-\captionsetup[subtable]{font=normal}
-\usepackage{color}
-\usepackage{hyperref}
-\usepackage[round]{natbib}
+% \documentclass{article}
+% \usepackage[top=1.25in, bottom=1.1in, left=1.25in, right=1in]{geometry}
+% \usepackage[utf8]{inputenc}
+% \usepackage{fullpage}
+% \usepackage {setspace}
+% \usepackage[hang,flushmargin]{footmisc} %control footnote indent
+% \usepackage{url} % for website links
+% \usepackage{amssymb,amsmath}%for matrix
+% \usepackage{graphicx}%for figure
+% \usepackage{appendix}%for appendix
+% \usepackage{float}
+% \usepackage{multirow}
+% \usepackage{longtable}
+% \usepackage{morefloats}%in case there are too many float tables and figures
+% \usepackage{caption}
+% \usepackage{subcaption}
+% \usepackage{listings}
+% \captionsetup[subtable]{font=normal}
+% \usepackage{color}
+% \usepackage{hyperref}
+% \usepackage[round]{natbib}
 
-%\usepackage{Sweave}
-\setlength{\parindent}{0em}
-\setlength{\parskip}{0.5em}
-
-
-\graphicspath{{0.plots/}}
+% %\usepackage{Sweave}
+% \setlength{\parindent}{0em}
+% \setlength{\parskip}{0.5em}
 
 
+% \graphicspath{{0.plots/}}
 
-\begin{document}
+
+
+% \begin{document}
 
 
 \section{Background}
-Longitudinal studies are ubiquitous in biostatistics context. For example, in a randomized clinical trials (RCT) where patients are randomly allocated into different treatment arms and are followed over time to collect some outcome of interest. Repeated measurements will then be produced from this follow-up mechanism. One of the important features of longitudinal data is that the repeated measurements from the same subject are more ``similar'' to each other compared to those measures from different subjects, i.e. within subject measures tend to be intercorrelated. This feature requires special statistical techniques to handle the correlation thus valid scientific inference can be drawn from the data. As discussed in \cite{diggle2002analysis}, there are mainly three methods we can use to analyze longitudinal data: marginal model, transition model and random effects model. Estimates of the regression coefficients from different models have different interpretations and the choice of a model depends on study objectives, the source of correlation as well as model's capacity. In this thesis work we will focus on applying random effects model to longitudinal data. A model that contains both random effects and fixed effects is called mixed effects model. The mixed effects model methodology, first introduced by R.A. Fisher \citep{fisher1919xv},  is a statistical tool that is used across a wide variety of disciplines including biostatistical contexts. Mixed effects models are especially popular in researches involving repeated measurements or observations from multilevel (or hierarchical) structure where the correlation between observations is not negligible as discussed above.\par
+\subsection{Literature Review}
+\subsubsection{General Background of Joint Modeling}\label{sec:bak_jm}
+Longitudinal studies are ubiquitous in biostatistics context. For example, in randomized clinical trials (RCT) patients are randomly allocated into different treatment arms and are then followed over time to collect outcome(s) and risk factors. Repeated measurements will then be produced from this follow-up mechanism. One of the important features of longitudinal data is that the repeated measurements from the same subject are more ``similar'' to each other compared to those measures from different subjects, i.e. within subject measures tend to be intercorrelated. In statistical analyses, this feature requires special techniques to handle the correlation for valid scientific inference. There are mainly three methods for analyzing longitudinal data: marginal model, transition model and random effects model \citep{diggle2002analysis}. Estimations of the regression coefficients have different interpretations and the choice of a model depends on study objectives, the source of correlation as well as the capacity of the model. This thesis work will focus on applying random effects models to longitudinal data. A model that contains both random effects and fixed effects is called mixed effects model. The mixed effects model methodology is a statistical tool that is used across a wide variety of disciplines including biostatistics. Currently, mixed effects models are especially popular in research involving repeated measurements \citep{laird1982random} or observations from multilevel (or hierarchical) structure where the correlation between observations is not negligible.\par
 
-In many clinical trails and medical studies, time-to-event (survival) data is commonly generated along with the longitudinal measurements. Often times, the outcome of interest in survival data, for example disease recurrence, possible drop-outs, or death, is correlated with the longitudinal measurements. Simply ignoring and the correlation and fitting two models separately will lead to lost of information and misleading results. Joint model (JM) method for longitudinal and survival data was first proposed by \cite{tsiatis1995modeling} and \cite{faucett1996simultaneously} to handle this issue and to obtain unbiased estimators. JM is well studied in recent years, for example, \cite{henderson2000joint}, \cite{wang2001jointly}, and \cite{xu2001joint}. In terms of Bayesian methodology, \cite{guo2004separate} developed a fully Bayesian method to fit the JM using MCMC methods and implemented them in WinBUGS software. See \cite{yu2004joint} for a good review of JM topic. Many extensions have also been developed for JM, including considering multiple longitudinal outcomes \citep{brown2005flexible,rizopoulos2011bayesian}, incorporating multiple failure times \citep{elashoff2008joint}, and so on. \par
-
-
-In most of the JM related works, the longitudinal part is modeled using linear mixed model (LMM), which is a widely used application of mixed effects methods. In brief, a LMM assumes the expected value of the outcome is a linear function of a set of covariates and observations from the same subject share a same unobserved latent variable, i.e. random effect, to account for the correlation among those observations. When conditional random effects, observations from the same subject are treated as independent. In addition, it also assumes the unobserved random error follows normal distribution.\par
-
-Our concern for the widely used LMM is that in many circumstance the normality assumption of the error term can not always be satisfied, even after trying various ways of transformation. A commonly encountered situation is when there exits outliers or skewness in the outcome, where LMM is not appropriate to use. In other cases, the conditional mean may not be the primary interest and researchers may also be interested the covariate effects on the lower/upper quantiles of the outcome. \emph{For example}. Instead of trying to fix the limitations of LMM, quantile regression is another method that we may consider since it can meet all above needs directly. There are several advantages of quantile regression over the ubiquitous mean regression (a.n.a. linear regression) model. To list a few, quantile regression provides a much more comprehensive and focused insight into the association between the variables by studying the conditional quantiles functions of the outcome,  which may not be observed by looking only at conditional mean of the outcome \citep{koenker2005quantile}. In quantile regression, the regression coefficients (${\bf \beta}$) are functions of the quantile ($\tau$), and their estimates vary according to different quantiles. Thus quartile regression provides a way to studying the heterogeneity of the outcome that is associated with the covariates \citep{koenker2005quantile}. Moreover, as mentioned above, quantile regression is more robust against outliers in the outcome compared with the mean regression, which is an immediate extension from the property of quantiles. \par
-
-Quantile regression is becoming more and more popular in the statistical community. \cite{koenker1978regression} introduced a method in estimating the conditional quantiles. As an introductory material, Koenker \cite{koenker2001quantile} briefly covers the fundamentals of quantile regression, parameter estimation techniques, inference, asymptotic theory, etc., his book provides more comprehensive and deeper introduction on quantile regression related topics \cite{koenker2005quantile}.  \cite{yu2001bayesian} introduced the idea of Bayesian quantile regression by modeling the error term using asymmetric Laplace distribution (ALD) followed the idea proposed in \cite{koenker1978regression}. \cite{kozumi2011gibbs} developed a Gibbs sampling algorithm for Bayesian quantile regression models, in which they used a location-scale mixture representation of the ALD. Many works have been done to extend the quantile regression method to accommodate longitudinal data. \cite{jung1996quasi} developed a quansi-likehood method for median regression model for longitudinal data. \cite{geraci2007quantile} proposed to fit the quantile regression for longitudinal data based on ALD and the estimation is made by using Monte Carlo EM algorithm. Later on, \cite{liu2009mixed} followed the idea of \cite{geraci2007quantile} and extended the model from random intercept to including random slope as well. The study of longitudinal data using quantile regression is becoming popular in recent years. \cite{fu2012quantile} proposed  a working correlation model for quantile regression for longitudinal data, a induced smoothing method was used to make the inference of the estimators. Fully Bayesian techniques and  Gibbs sampling algorithm became possible when the error term is decomposed as the mixture of normal and exponential random variables for the quantile linear mixed model  \citep{kotz2001laplace}, see \cite{kozumi2011gibbs} and \cite{luo2012bayesian} for applications. The fully Bayesian method is appealing to us because it is easy to implement and to make inference, the uncertainty of the unknowns is taken into account, and it is flexible in the distribution of random effects. The detailed background about Bayesian quantile linear mixed model will be introduced in Section \ref{sec:BLQMM}.\par
+In many clinical trials and medical studies, time-to-event data are commonly generated along with the longitudinal measurements. Often, the outcome of interest in survival data, such as disease recurrence, possible drop-outs, or death, is correlated with the longitudinal measurements. For example, HIV patients with decreasing CD4 cell count are more likely to die or prostate cancer patients with elevated prostate specific antigen (PSA) are more susceptible to prostate cancer recurrence. Simply ignoring the correlation and fitting two models separately will lead to loss of information and misleading results. The joint model (JM) method for longitudinal and survival data was first proposed by \cite{tsiatis1995modeling} and \cite{faucett1996simultaneously} to handle this issue and to obtain unbiased estimators. JM is well studied in recent years, for examples see \cite{henderson2000joint}, \cite{wang2001jointly}, and \cite{xu2001joint}. \cite{guo2004separate} developed a fully Bayesian method to fit the JM using MCMC methods and implemented them in WinBUGS software. For more details, see \cite{yu2004joint} as a good review of the JM methodology. Many extensions have also been developed for JM, including considering multiple longitudinal outcomes \citep{brown2005flexible,rizopoulos2011bayesian}, incorporating multiple failure times \citep{elashoff2008joint}. \par
 
 
+\subsubsection{Longitudinal Quantile Regression in the Setting of Joint Modeling }\label{sec:bak_lqm_jm}
+In most of the JM related works the longitudinal part is modeled using the linear mixed model (LMM), which is a widely used application of the mixed effects method. In brief, an LMM assumes the expected value of the longitudinal outcome is a linear function of the covariates and repeated observations from the same subject share a same unobserved latent variable, i.e. random effect, to account for the correlation between them. When conditional on random effects, observations from the same subject are treated as independent. In addition, traditional LMM also assumes the distribution of unobserved random error is Gaussian.\par
 
-The joint model of longitudinal data, using quantile regression, and time to event data is little studied so far. To our knowledge, \cite{Alessio2014qrjm} is the first work that extended classical JM to incorporate quantile regression model in the longitudinal process. In their paper the parameter estimations is obtained using Monte Carlo expectation and maximization (MCEM) method.  Also, in recent years, another extension that attracts a lot of attention of the JM method is to make subject specific prediction for longitudinal or survival outcome based on model estimations \citep{rizopoulos2011dynamic,taylor2013real}. In this thesis project, we will focus on developing new extension to current joint models in analyzing longitudinal and time to event data. Specifically, first of all we will develop a fully Bayesian method in estimating the model parameters in the proposed JM; second, based on the estimations made on step one and given the historical information, dynamic prediction of the probability of event occurrence will be made and our method for prediction will be validated; at last, there will be an application to the real data  using our newly developed methods. \par
+Our concern for the widely used LMM is that in many circumstances the normality assumption of the error term cannot be satisfied (even after trying various transformations). A commonly encountered situation is when outliers exist or when the outcome is skewed. In these situations, LMM is not appropriate to use directly. In other cases, the conditional mean of the longitudinal outcome may not be the primary interest and researchers may be more interested in the covariates effect on the lower/upper quantiles of the outcome. For example, the treatment effect for patients with higher blood pressure is of greater importance to us because they are at higher risk of having strokes or developing heart failures. Instead of trying to fix the limitations of LMM, quantile regression is an alternative method that provides a single solution to all above issues with LMM. There are several advantages of quantile regression over the ubiquitous mean regression (or linear regression) model. To list a few, quantile regression provides a much more comprehensive and focused insight into the association between the variables by studying the conditional quantile functions of the outcome,  which may not be observed by looking only at conditional mean of the outcome \citep{koenker2005quantile}. In quantile regression, the regression coefficients (${\boldsymbol \beta}$) are functions of the quantile ($\tau$), thus the estimated values of $\boldsymbol{\beta}$ vary according to different quantiles. As a results quantile regression provides a way to study the heterogeneity of the outcome that is associated with the covariates \citep{koenker2005quantile}. Moreover, quantile regression is more robust against outcome outliers compared with the mean regression, which is an immediate extension from the property of quantiles. \par
 
-
-
-
-
-% Another concern that frequently arises from longitudinal study is that the subjects may be lost at follow up due to events. Such cases are called informative drop-outs (ID) when the event occurrences are associated with the longitudinal outcome. Simply ignore the missing mechanism can lead to biased estimates of the parameters in the longitudinal model. The informative drop-out problem has attracted much attention from the statisticians and a wide array of methods have been proposed to handle this issue \cite{diggle1994informative} \cite{lipsitz1997quantile} \cite{touloumi2003comparison} \cite{yuan2010bayesian}. For more information in this research area, there are several good review papers of modeling longitudinal data with non-ignorable drop-outs, including \cite{diggle2007analysis} and \cite{hogan2004handling}. \emph{[To-do: put some review of previous work and their limitations and propose our model then state the advantage.]}
+Quantile regression is becoming more and more popular in the statistical community. \cite{koenker1978regression} introduced a method for estimating the conditional quantiles. As an introductory material, \cite{koenker2001quantile} briefly covers the fundamentals of quantile regression, parameter estimation techniques, inference, asymptotic theory, etc., Koenker's 2005 book provides a comprehensive and deeper introduction to quantile regression related topics \citep{koenker2005quantile}.  \cite{yu2001bayesian} introduced the idea of Bayesian quantile regression by modeling the error term in the model using asymmetric Laplace distribution (ALD). Much work has been done to extend the quantile regression method to accommodate longitudinal data. \cite{jung1996quasi} developed a quasi-likehood method for median regression model for longitudinal data. \cite{geraci2007quantile} proposed to fit the quantile regression for longitudinal data based on ALD and the estimation is made by using a Monte Carlo EM algorithm. Later on, \cite{liu2009mixed} followed the idea of \cite{geraci2007quantile} and extended the model from random intercept to including random slope as well. The study of longitudinal data using quantile regression has become popular in recent years. \cite{fu2012quantile} proposed  a working correlation model for quantile regression for longitudinal data. An induced smoothing method was used to make the inference of the estimators. Fully Bayesian techniques and  Gibbs sampling algorithm become possible when the error term is decomposed as the mixture of normal and exponential random variables for the quantile linear mixed model; see \cite{kozumi2011gibbs} and \cite{luo2012bayesian} for applications. The fully Bayesian method is appealing because it is easy to implement, easy make inferences, the uncertainty of the unknowns is taken into account, and it is flexible in the distribution of random effects. The detailed background about Bayesian quantile linear mixed model will be provided in Section \ref{sec:BLQMM}.\par
 
 
-\par
+\subsubsection{Subject Specific Dynamic Predictions Based on Joint Modeling}\label{sec:bak_pred_jm}
+In recent years, another extension of the JM that attracts increasing attention is to make subject specific predictions for longitudinal or survival outcomes based on patient information at hand. In clinical settings, as we monitor the health of a patient over time under a joint modeling frame work, time-varying measurements can be used to derive other useful summary indicators such as probability of events. Thus JM provides a vital tool in predicting future health outcomes for the patients at risk. \par
+
+There are several applications of this prediction idea. \cite{yu2008individual} used a JM framework to study the longitudinal measures of PSA in predicting the probabilities of recurrence of prostate cancer up to four years in the future. In their work, the longitudinal part was modeled using a nonlinear hierarchical mixed model and Cox proportional hazards model with time-dependent covariates was used to model the time to clinical recurrences. Both the value of longitudinal outcome and probability of recurrence were predicted. \cite{proust2009development} also worked on the PSA and prostate cancer problem and they used the joint latent class model (JLCM) \citep{lin2002latent} to build a dynamic prognostic tool for predicting the recurrence of prostate cancer, in which they used the maximum likelihood estimate method. As another example, \cite{rizopoulos2011dynamic} illustrated how to make survival probabilities predictions under the JM framework using the frequentist method. The application is demonstrated using the famous AIDS CD4 cell count data. Another important component for all of the prediction works is to validate the accuracy of the predicted results, which is discussed in all of above studies. There are different aspects to consider for assessing the predictive performance of the model. \cite{rizopoulos2011dynamic} used the receiver operating characteristic (ROC) curve based an approach to assess how well the proposed model can differentiate patients who will have events from those who will not. While \cite{proust2009development} computed the absolute error of prediction (EP) curves showing weighted average absolute error of prediction (WAEP) over three years and the EP at one- and three- year horizons. And in \cite{taylor2013real}, a simple graphical method was used to assess the predicative accuracy. More technique details will be given in Section \ref{sec:dpred} about the JM estimation, prediction and results validation that will be used in this thesis work.
 
 
 
+\subsection{Public Health Significance}\label{sec:significance}
+This thesis work contributes to the public health field in the following ways. Studying the low or high tail of the longitudinal outcome can be of greater interest and more meaningful compared with focusing on the population mean. Specific examples of preference for studying conditional quantiles over the conditional mean of the outcomes are cardiovascular studies that focus on the effect of interventions to reduce the blood pressure for hypertensive patients (upper tail) who are clinically at greater risk of developing heart diseases and study of low birth weight infants (lower tail) \citep{koenker2001quantile}. Under such conditions, our method provides a vital complement to the traditional linear regression method. Due to the flexibility of quantile regression in modeling the longitudinal outcome, i.e. regression quantile can be chosen depending on specific research interest, we would be able to gain a much better insight on the relationship between the outcome and covariates. Under the JM framework, the regression parameters in the survival model are also functions of quantile, which means our model will provide the quantile specific association between the longitudinal outcome and the event probability. \par
 
-
+Another, and more important, utilization of our model is to make ``accurate'' subject specific predictions of future event probabilities, which can be of great importance in clinical practice. The parameter estimations of the predictive model will be made based on a relatively large sample (i.e. the training set), when given a new patient with his or her baseline characteristics as well as the historical biomarker records, the model is able to produce subject specific prediction for this patient. This would allow us to tailor medical treatment specifically for that patient in order to lower his or her event probabilities in the future. This idea fits into the big concept of ``personalized medicine'', which aims to provide the right patient with the right drug at the right time \citep{us2013paving}. Traditional health care interventions prescribed to patients are designed based on its average effect on the population, but these interventions may work perfectly on some patients but not on others. Thus, individualized treatment should be more effective. The practice of customized treatment does already exist in treating tumors where doctors prescribe drugs based on the tumor's growth and some specific gene mutations of the patient, but there are many more potential applications of personalized medicine for patients suffering with other diseases. Thus, as Precision Medicine Initiative strives for, our method of making subject specific predictions of event probabilities in the future provides an important tool to physicians in making individualized decisions in order to achieve better clinical outcomes. 
 
 
 
 
+\subsection{Research Questions and Specific Aims}\label{sec:aims}
+The joint model of longitudinal data, using quantile regression and survival data is little studied. To our knowledge, \cite{Alessio2014qrjm} is the first work that extended classical JM to incorporate a quantile regression model in the longitudinal process. In their paper the parameter estimations are obtained using the Monte Carlo expectation and maximization (MCEM) method.  Also, there is no work extending the subject specific dynamic predictions method to the longitudinal quantile regression based JM framework. We aim to extend current research and fill those gaps.\par
+
+We have the following aims:
+
+\begin{itemize}
+\item To develop a fully Bayesian method for estimating the model parameters in the proposed JM, based on which a subject specific dynamic predictions method for survival events will be developed; 
+\item To extend our new Bayesian JM method in Aim 1 to study the recurrent events data and develop a new method for parameter estimation in the JM of longitudinal and recurrent event data;
+\item To develop a method for subject specific dynamic predictions of recurrent events based on our results from the first and second aims.
+\end{itemize}
+
+To demonstrate the application of our proposed methods, we will be using the data from The Antihypertensive and Lipid-Lowering Treatment to Prevent Heart Attack Trial (ALLHAT) \citep{davis1996rationale}, which was the largest antihypertensive treatment trial and the second largest lipid-lowering trial ever conducted. We will mainly focus on the antihypertensive component of the trail in studying the effects of risk factors as well as to make dynamic predictions of event occurrences for subjects at the higher tail of the longitudinal outcome (i.e. the blood pressure). More information about the ALLHAT study is given in Section \ref{sec:data}.
 
 
 
-\bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
-\addcontentsline{toc}{section}{References}
-\bibliography{QRJM}
-\end{document}
+% \subsubsection{Specific Aims for Project 1}
+% Prediction of survival probability using JM of quantile regression and Cox proportional hazard models.
+
+
+% \subsubsection{Specific Aims for Project 2}
+% Inference of JM of quantile regression and recurrent event models
+
+
+
+% \subsubsection{Specific Aims for Project 3}
+% Prediction of recurrent probability using JM of quantile regression and Cox proportional hazard models.
+
+
+
+
+
+
+
+
+% \bibliographystyle{plainnat}%%%%%%%%%%%%%%%%%%%%
+% \addcontentsline{toc}{section}{References}
+% \bibliography{QRJM}
+% \end{document}

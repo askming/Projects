@@ -1,0 +1,51 @@
+model{
+    k1 <- (1-2*qt)/(qt*(1-qt))
+    k2 <- 2/(qt*(1-qt))
+
+    for (i in 1:I){
+        # prior for random effects
+        u[i, 1:2] ~ dmnorm(zero[], precision[,])
+
+        # longitudinal process, BQR mixed model using ALD representation
+        for (j in 1:J[i]){
+            er[i,j] ~ dexp(sigma)
+            mu[i,j] <- u[i,1] + u[i,2]*t[j] + inprod(X[i,], beta[]) + delta[1]*H[i,1] + delta[2]*H[i,2]*t[j] + k1*er[i,j]
+            prec[i,j] <- sigma/(k2*er[i,j])
+            y[i,j] ~ dnorm(mu[i,j], prec[i,j])
+        } #end of j loop
+
+        # survival process, baseline hazard is set to 1
+        A[i] <- alpha*u[i,2] + alpha*delta[2]*H[i,2]
+        B[i] <- alpha*delta[1]*H[i,1] + alpha*u[i,1] + inprod(gamma, W[i,])
+        S1[i] <- exp(-c*exp(B[i])*(pow(exp(A[i]), Ti[i])-1)/A[i])
+        S[i] <- ifelse(S1[i]>1E-10, S1[i], 1E-10)
+        h[i] <- c*exp(inprod(gamma, W[i,]) + alpha*(delta[1]*H[i,1] + delta[2]*H[i,2]*Ti[i]) + alpha*(u[i,1] + u[i,2]*Ti[i]))
+        L[i] <- pow(h[i], event[i])*S[i]/1E+08
+
+        # zero trick
+        phi[i] <- -log(L[i])
+        zeros[i] ~ dpois(phi[i])
+
+    }#end of i loop
+
+	precision[1:2,1:2] <- inverse(Sigma[,])
+    Sigma[1,1] <- pow(w11, 2)
+    Sigma[1,2] <- w21*w11
+    Sigma[2,1] <- Sigma[1,2]
+    Sigma[2,2] <- w22*w22 + w21*w21
+    rho <- Sigma[2,1]/sqrt(Sigma[1,1]*Sigma[2,2])
+
+	# priors for other parameters
+    alpha ~ dnorm(0, 0.001)
+    beta[1] ~ dnorm(0, 0.001)
+    beta[2] ~ dnorm(0, 0.001)
+    delta[1] ~ dnorm(0, 0.001)
+    delta[2] ~ dnorm(0, 0.001)
+    gamma[1] ~ dnorm(0, 0.001)
+    gamma[2] ~ dnorm(0, 0.001)
+    sigma ~ dgamma(0.001, 0.001)
+    w11 ~ dunif(0.1, 10)
+    w22 ~ dunif(0.1, 10)
+    w21 ~ dnorm(0, 0.1)
+    c ~ dunif(0.01, 10)
+}

@@ -8,6 +8,8 @@
 \usepackage{graphicx}%for figure
 \usepackage{appendix}%for appendix
 \usepackage{float}
+\floatstyle{plaintop}
+\restylefloat{table}
 \usepackage{multirow}
 \usepackage{longtable}
 \usepackage{morefloats}%in case there are too many float tables and figures
@@ -22,6 +24,17 @@
 \usepackage{courier}
 \usepackage{color}
 \usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{rotating} % rotate table by some degree
+\usepackage{rotfloat}
+\usepackage{mwe}
+\usepackage{morefloats}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subtable]{font=normal}
+\usepackage{listings}
 
 %\definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -61,19 +74,23 @@
 \doublespace
 
 \begin{document}
+
+\title{ Model Estimation and Dynamic Predictions for Subject Specific Event Probabilities in Joint Modeling Using Longitudinal Quantile Regression}
+\author{Ming Yang}
+\date{}
+\maketitle
+
+
 \tableofcontents
+\listoftables
+\listoffigures
 
 \input{1.background.tex}
-
-\input{2.aims.tex}
-
+% \input{2.aims.tex}
 \input{3.data.tex}
-
 \input{4.methods.tex}
-
 \input{5.simulation_plan.tex}
-
-\input{6.appendix.tex}
+% \input{6.appendix.tex}
 
 
 \newpage

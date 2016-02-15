@@ -1,0 +1,73 @@
+\documentclass[compress]{beamer}
+
+\usetheme{boxes}
+%\usecolortheme{dolphin}
+\useoutertheme[subsection=false]{miniframes}
+\usepackage{etoolbox}
+\usepackage[english]{babel}
+\usepackage{fontspec}
+\usefonttheme{serif}
+\setmainfont{Helvetica Neue Light}
+%\setmainfont{Ubuntu Light}
+\newfontfamily\notefont{Ubuntu Light}
+\newfontfamily\head{Montserrat}
+
+\makeatletter
+\patchcmd{\slideentry}{\advance\beamer@xpos by1\relax}{}{}{}
+\def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax}%
+\makeatother
+
+\setbeamercolor{footline}{fg=blue}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+\title[Hypothesis Testing] % (optional, only for long titles)
+{Title goes here}
+\subtitle{Proposal Defense}
+\author[ Ming Yang] % (optional, for multiple authors)
+{\head{Ming Yang}}
+\institute[UTSPH] % (optional)
+{
+  \inst{}%
+  Dept. of Biostatistics, UTSPH
+}
+\date[ ] % (optional)
+{February, 2015}
+%\subject{Informatik}
+
+%%% title page
+\frame{\titlepage}
+
+%%% table of contents
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+
+\section{One} %%%%%%%
+\frame{\frametitle{Frame 1}
+ 
+}
+
+\subsection{1.1} %%%%%%%
+\frame{\frametitle{Frame 1}
+ 
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+\end{document}
